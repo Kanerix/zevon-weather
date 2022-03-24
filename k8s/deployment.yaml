@@ -3,21 +3,26 @@ kind: Deployment
 metadata:
   name: zevon-weather-deployment
   labels:
-    app: nextjs
+    app: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nextjs
+      app: frontend
   template:
     metadata:
       labels:
-        app: nextjs
+        app: frontend
     spec:
       containers:
-      - name: zevon-weather
-      image: kanerix/zevon-weather
-      ports: 
-      - containerPort: 80
-
-  
+        - name: zevon-weather 
+          image: kanerix/zevon-weather
+          ports:
+          - containerPort: 80
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            request: 
+              memory: 256Mi
+              cpu: "0.2"
