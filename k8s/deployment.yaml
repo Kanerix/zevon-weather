@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: deployment
+metadata:
+  name: zevon-weather
+  labels:
+    app: nextjs
+spec:
+  replicas: 1
+  selector:
+    matchLabel:
+      app: nextjs
+  template:
+    metadata:
+      labels:
+        app: nextjs
+    spec:
+      containers:
+      - name: kaneix/zevon-weather
+      image: kanerix/zevon-weather
+      ports: 
+      - containerPort: 80
+
+  
