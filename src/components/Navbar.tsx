@@ -1,6 +1,13 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Group, Navbar, Text, ThemeIcon, UnstyledButton } from '@mantine/core'
+import {
+	DefaultMantineColor,
+	Group,
+	Navbar,
+	Text,
+	ThemeIcon,
+	UnstyledButton,
+} from '@mantine/core'
 import {
 	IconApi,
 	IconDatabase,
@@ -13,7 +20,7 @@ import { PropsWithChildren } from 'react'
 interface Page {
 	path: string
 	label: string
-	color: string
+	color: DefaultMantineColor
 	icon: PropsWithChildren<TablerIconProps>
 }
 
@@ -24,7 +31,7 @@ export default function MyNavbar() {
 		{
 			path: '/',
 			label: 'Home',
-			color: 'red',
+			color: 'blue',
 			icon: <IconHome />,
 		},
 		{
@@ -36,13 +43,13 @@ export default function MyNavbar() {
 		{
 			path: '/docs',
 			label: 'Docs',
-			color: 'blue',
+			color: 'violet',
 			icon: <IconApi />,
 		},
 		{
 			path: '/sources',
 			label: 'Sources',
-			color: 'blue',
+			color: 'red',
 			icon: <IconHelp />,
 		},
 	]
