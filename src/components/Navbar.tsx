@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import {
 	DefaultMantineColor,
 	Group,
@@ -15,7 +16,6 @@ import {
 	IconHome,
 	TablerIconProps,
 } from '@tabler/icons'
-import { PropsWithChildren } from 'react'
 
 interface Page {
 	path: string
@@ -24,7 +24,12 @@ interface Page {
 	icon: PropsWithChildren<TablerIconProps>
 }
 
-export default function MyNavbar() {
+interface MyNavbarProps {
+	open: boolean
+	setOpen: Dispatch<SetStateAction<boolean>>
+}
+
+export default function MyNavbar(props: MyNavbarProps) {
 	const router = useRouter()
 
 	const pages: Page[] = [
@@ -55,7 +60,12 @@ export default function MyNavbar() {
 	]
 
 	return (
-		<Navbar width={{ base: 250 }} p='xs'>
+		<Navbar
+			p='xs'
+			hiddenBreakpoint='sm'
+			hidden={!props.open}
+			width={{ sm: 200, md: 250 }}
+		>
 			<Navbar.Section mt='xs'>
 				{pages.map((item, index) => {
 					const selected = router.asPath === item.path

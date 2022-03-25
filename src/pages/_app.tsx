@@ -2,10 +2,14 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { AppShell, MantineProvider } from '@mantine/core'
+import { useState } from 'react'
+
 import MyNavbar from '../components/Navbar'
 import MyHeader from '../components/Header'
 
 export default function App(props: AppProps) {
+	const [open, setOpen] = useState(false)
+
 	const { Component, pageProps } = props
 
 	return (
@@ -26,8 +30,9 @@ export default function App(props: AppProps) {
 				}}
 			>
 				<AppShell
-					navbar={<MyNavbar />}
-					header={<MyHeader />}
+					navbar={<MyNavbar open={open} setOpen={setOpen} />}
+					header={<MyHeader open={open} setOpen={setOpen} />}
+					fixed
 					styles={(theme) => ({
 						main: {
 							backgroundColor: theme.colors.dark[8],
