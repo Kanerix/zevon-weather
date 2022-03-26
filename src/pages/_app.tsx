@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-undef */
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { AppShell, MantineProvider } from '@mantine/core'
@@ -21,12 +20,12 @@ export default function App(props: AppProps) {
 					content='minimum-scale=1, initial-scale=1, width=device-width'
 				/>
 			</Head>
-
 			<MantineProvider
 				withGlobalStyles
 				withNormalizeCSS
 				theme={{
 					colorScheme: 'dark',
+					fontFamily: 'Poppins',
 				}}
 			>
 				<AppShell
