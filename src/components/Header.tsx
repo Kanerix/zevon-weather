@@ -29,20 +29,17 @@ export default function MyHeader(props: MyHeaderProps) {
 					height: '100%',
 				}}
 			>
+				<MediaQuery largerThan='sm' styles={{ display: 'none' }}>
+					<Burger
+						opened={props.open}
+						onClick={() => props.setOpen((o) => !o)}
+						size='sm'
+						color={theme.colors.gray[6]}
+						mr='xl'
+					/>
+				</MediaQuery>
 				<Link href='/' passHref>
 					<UnstyledButton>
-						<MediaQuery
-							largerThan='sm'
-							styles={{ display: 'none' }}
-						>
-							<Burger
-								opened={props.open}
-								onClick={() => props.setOpen((o) => !o)}
-								size='sm'
-								color={theme.colors.gray[6]}
-								mr='xl'
-							/>
-						</MediaQuery>
 						<MediaQuery
 							smallerThan='sm'
 							styles={{ display: 'none' }}

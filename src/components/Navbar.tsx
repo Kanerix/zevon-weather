@@ -73,6 +73,11 @@ export default function MyNavbar(props: MyNavbarProps) {
 					return (
 						<Link key={index} href={item.path} passHref>
 							<UnstyledButton
+								onClick={() => {
+									if (props.open) {
+										props.setOpen(false)
+									}
+								}}
 								sx={(theme) => ({
 									display: 'block',
 									width: '100%',
