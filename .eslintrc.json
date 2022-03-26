@@ -1,5 +1,11 @@
 {
-	"extends": ["next/core-web-vitals", "eslint:recommended"],
+	"extends": [
+		"eslint:recommended",
+		"next/core-web-vitals",
+		"plugin:@type/eslint-recommended"
+	],
+	"parser": "¨@typescript-eslint/parser",
+	"plugins": ["@typescript-eslint"],
 	"settings": {
 		"next": {
 			"rootDir": "./src"
