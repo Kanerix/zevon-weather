@@ -72,9 +72,11 @@ const Home: NextPage = () => {
 			</Grid.Col>
 			<Grid.Col xl={9}>
 				<Paper p='md'>
-					<Text size='xl'>Prices something:</Text>
 					<Chart
 						options={{
+							title: {
+								text: 'Energy Price from the last hour',
+							},
 							chart: {
 								id: 'basic-bar',
 								toolbar: {
@@ -82,18 +84,35 @@ const Home: NextPage = () => {
 								},
 							},
 							xaxis: {
-								categories: ['1', '2', '3', '4', '5'],
+								title: {
+									text: 'Time',
+								},
+								categories: [
+									'60 MIN',
+									'45 MIN',
+									'30 MIN',
+									'15 MIN',
+									'NOW',
+								],
 							},
 							yaxis: {
 								title: {
-									text: 'Price (DKK/Energy)',
+									text: 'Price',
 								},
 							},
 							stroke: {
 								curve: 'smooth',
 							},
+							tooltip: {
+								theme: 'dark',
+							},
 						}}
-						series={[{ name: 'Price', data: [23, 32, 38, 23, 32] }]}
+						series={[
+							{
+								name: 'Price',
+								data: [23, 32, 38, 23, 32],
+							},
+						]}
 						type='line'
 					/>
 				</Paper>
