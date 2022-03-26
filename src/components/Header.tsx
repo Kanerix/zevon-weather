@@ -22,15 +22,15 @@ export default function MyHeader(props: MyHeaderProps) {
 
 	return (
 		<Header height={60} p='xs'>
-			<Link href='/' passHref>
-				<UnstyledButton>
-					<Box
-						sx={{
-							display: 'flex',
-							alignItems: 'center',
-							height: '100%',
-						}}
-					>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					height: '100%',
+				}}
+			>
+				<Link href='/' passHref>
+					<UnstyledButton>
 						<MediaQuery
 							largerThan='sm'
 							styles={{ display: 'none' }}
@@ -72,9 +72,9 @@ export default function MyHeader(props: MyHeaderProps) {
 								</Box>
 							</Box>
 						</MediaQuery>
-					</Box>
-				</UnstyledButton>
-			</Link>
+					</UnstyledButton>
+				</Link>
+			</Box>
 		</Header>
 	)
 }
