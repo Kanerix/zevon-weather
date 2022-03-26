@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: zevon-weather 
-          image: kanerix/zevon-weather
+          image: kanerix/zevon-weather:latest
+          imagePullPolicy: Always
           ports:
           - containerPort: 3000
           resources:
