@@ -42,7 +42,7 @@ export default function MyNavbar(props: MyNavbarProps) {
 		{
 			path: '/database',
 			label: 'Database',
-			color: 'green',
+			color: 'red',
 			icon: <IconDatabase />,
 		},
 		{
@@ -54,7 +54,7 @@ export default function MyNavbar(props: MyNavbarProps) {
 		{
 			path: '/sources',
 			label: 'Sources',
-			color: 'red',
+			color: 'green',
 			icon: <IconHelp />,
 		},
 	]

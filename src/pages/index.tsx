@@ -77,7 +77,7 @@ const Home: NextPage = () => {
 							marginBottom: '12px',
 						}}
 					>
-						Energy header
+						Energy prices
 					</Text>
 					<Text
 						sx={(theme) => ({
@@ -87,7 +87,7 @@ const Home: NextPage = () => {
 							color: theme.colors.gray[6],
 						})}
 					>
-						(+45%) Sidste 90 minutter
+						(+45%) Last 120 minutes
 					</Text>
 					<EnergyChart />
 				</Paper>
