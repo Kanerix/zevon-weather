@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 import MyNavbar from '../components/Navbar'
 import MyHeader from '../components/Header'
+import { GlobalChartStyle } from '../components/GlobalChartStyle'
 
 export default function App(props: AppProps) {
 	const [open, setOpen] = useState(false)
@@ -20,6 +21,7 @@ export default function App(props: AppProps) {
 					content='minimum-scale=1, initial-scale=1, width=device-width'
 				/>
 			</Head>
+			<GlobalChartStyle />
 			<MantineProvider
 				withGlobalStyles
 				withNormalizeCSS

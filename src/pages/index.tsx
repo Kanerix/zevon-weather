@@ -1,8 +1,6 @@
 import type { NextPage } from 'next'
-import dynamic from 'next/dynamic'
 import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
-
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
+import EnergyChart from '../components/EnergyChart'
 
 const Home: NextPage = () => {
 	const PriceColumn = ({
@@ -71,50 +69,27 @@ const Home: NextPage = () => {
 				/>
 			</Grid.Col>
 			<Grid.Col xl={9}>
-				<Paper p='md'>
-					<Chart
-						options={{
-							title: {
-								text: 'Energy Price from the last hour',
-							},
-							chart: {
-								id: 'basic-bar',
-								toolbar: {
-									show: false,
-								},
-							},
-							xaxis: {
-								title: {
-									text: 'Time',
-								},
-								categories: [
-									'60 MIN',
-									'45 MIN',
-									'30 MIN',
-									'15 MIN',
-									'NOW',
-								],
-							},
-							yaxis: {
-								title: {
-									text: 'Price',
-								},
-							},
-							stroke: {
-								curve: 'smooth',
-							},
-							tooltip: {
-								theme: 'dark',
-							},
+				<Paper p='xl'>
+					<Text
+						sx={{
+							fontSize: '28px',
+							fontWeight: '500',
+							marginBottom: '12px',
 						}}
-						series={[
-							{
-								name: 'Price',
-								data: [23, 32, 38, 23, 32],
-							},
-						]}
-						type='line'
-					/>
+					>
+						Energy header
+					</Text>
+					<Text
+						sx={(theme) => ({
+							fontSize: '18px',
+							fontWeight: '500',
+							marginBottom: '24px',
+							color: theme.colors.gray[6],
+						})}
+					>
+						(+45%) Sidste 90 minutter
+					</Text>
+					<EnergyChart />
 				</Paper>
 			</Grid.Col>
 		</Grid>
