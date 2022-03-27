@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
     name: zevon-weather-deployment
     labels:
-        app: frontend
+        app: zevon-weather-frontend
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: frontend
+            app: zevon-weather-frontend
     template:
         metadata:
             labels:
-                app: frontend
+                app: zevon-weather-frontend
         spec:
             containers:
                 - name: zevon-weather

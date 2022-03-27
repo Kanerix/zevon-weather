@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: zevon-weather-nginx-service
+    name: zevon-weather-service
 spec:
     selector:
-        app: frontend
+        app: zevon-weather-frontend
     ports:
         - protocol: TCP
           port: 80
