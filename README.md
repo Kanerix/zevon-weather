@@ -1,34 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a school project holding a website created with Next.js and React.
 
-## Getting Started
+You can find the webpage at [weather.zevon.dk](http://www.weather.zevon.dk/).
 
-First, run the development server:
+**All kubernetes is done with [k3s](https://k3s.io/).**
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+This github workflow automatic build amd64 and arm64 images and pushes them to [DockerHub](https://hub.docker.com/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<br/>
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+# Purpose
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+The app is supposed to calculate and tell you the current price of energy, since the price is cheaper when the energy is greener.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+<br/>
 
-## Learn More
+# Getting started
 
-To learn more about Next.js, take a look at the following resources:
+You can host and change the website yourself if you clone the image.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You do so by following the instructions below:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1.  Clone the repository to your local machine
 
-## Deploy on Vercel
+    -   Install yarn if you don't already have it with `npm install -g yarn`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2.  Run the command `yarn` (Same as npm install)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3.  Run `yarn dev` (Same as npm run dev)
+
+4.  Go to [localhost:3000](https://localhost:3000/)
