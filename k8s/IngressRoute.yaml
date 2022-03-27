@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+    name: zevon-weather-nginx-ingress
+spec:
+    entryPoints:
+        - web
+    routes:
+        - match: PathPrefix(`/`)
+          kind: Rule
+          services:
+              - name: zevon-weather-nginx-service
+                port: 80
