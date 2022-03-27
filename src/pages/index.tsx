@@ -1,8 +1,25 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
+
 import EnergyChart from '../components/EnergyChart'
 
-const Home: NextPage = () => {
+const Home: NextPage = ({ chartData }) => {
+	const resultStringyfied = (): string => {
+		let stringify: string = ''
+
+		let result = Math.round(
+			(chartData[chartData.length - 1] / chartData[0] - 1) * 100
+		)
+
+		if (result > 0) {
+			stringify += '+'
+		}
+
+		stringify += `${result}`
+
+		return stringify
+	}
+
 	const PriceColumn = ({
 		color,
 		header,
@@ -77,7 +94,7 @@ const Home: NextPage = () => {
 							marginBottom: '12px',
 						}}
 					>
-						Energy prices
+						DKK/Energy prices
 					</Text>
 					<Text
 						sx={(theme) => ({
@@ -87,13 +104,21 @@ const Home: NextPage = () => {
 							color: theme.colors.gray[6],
 						})}
 					>
-						(+45%) Last 120 minutes
+						({resultStringyfied()}%) Last 120 minutes
 					</Text>
-					<EnergyChart />
+					<EnergyChart chartData={chartData} />
 				</Paper>
 			</Grid.Col>
 		</Grid>
 	)
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	return {
+		props: {
+			chartData: [28, 26, 28, 29, 27, 26, 27, 28, 27],
+		},
+	}
 }
 
 export default Home

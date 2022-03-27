@@ -2,7 +2,11 @@ import dynamic from 'next/dynamic'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-export default function EnergyChart() {
+interface EnergyChartProps {
+	chartData: number[]
+}
+
+export default function EnergyChart({ chartData }: EnergyChartProps) {
 	return (
 		<Chart
 			options={{
@@ -68,7 +72,7 @@ export default function EnergyChart() {
 			series={[
 				{
 					name: 'Price',
-					data: [25, 26, 28, 29, 27, 26, 27, 28, 27],
+					data: chartData,
 				},
 			]}
 			type='line'
