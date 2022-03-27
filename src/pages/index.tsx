@@ -46,7 +46,7 @@ const Home: NextPage = () => {
 		<Grid justify='center'>
 			<Grid.Col md={12} lg={4} xl={3}>
 				<PriceColumn
-					color='red'
+					color='green'
 					header='Low'
 					footer='13 away'
 					price={23}
@@ -62,7 +62,7 @@ const Home: NextPage = () => {
 			</Grid.Col>
 			<Grid.Col md={12} lg={4} xl={3}>
 				<PriceColumn
-					color='green'
+					color='red'
 					header='High'
 					footer='9 away'
 					price={38}
