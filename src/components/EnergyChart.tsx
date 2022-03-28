@@ -7,11 +7,15 @@ interface EnergyChartProps {
 }
 
 export default function EnergyChart({ chartData }: EnergyChartProps) {
+	const average = Math.round(
+		chartData.reduce((a, b) => a + b, 0) / chartData.length
+	)
+
 	return (
 		<Chart
 			options={{
 				chart: {
-					id: 'basic-bar',
+					id: 'energy-chart',
 					background: 'transparent',
 					fontFamily: 'Poppins',
 					foreColor: '#909090',
@@ -29,17 +33,6 @@ export default function EnergyChart({ chartData }: EnergyChartProps) {
 					},
 				},
 				xaxis: {
-					categories: [
-						'120 MIN',
-						'105 MIN',
-						'90 MIN',
-						'75 MIN',
-						'60 MIN',
-						'45 MIN',
-						'30 MIN',
-						'15 MIN',
-						'NOW',
-					],
 					crosshairs: {
 						stroke: {
 							color: '#808080',
@@ -50,6 +43,35 @@ export default function EnergyChart({ chartData }: EnergyChartProps) {
 					},
 					axisTicks: {
 						show: false,
+					},
+					categories: [
+						'120 MIN',
+						'105 MIN',
+						'90 MIN',
+						'75 MIN',
+						'60 MIN',
+						'45 MIN',
+						'30 MIN',
+						'15 MIN',
+						'0 MIN',
+					],
+				},
+				states: {
+					normal: {
+						filter: {
+							type: 'none',
+						},
+					},
+					hover: {
+						filter: {
+							type: 'none',
+						},
+					},
+					active: {
+						allowMultipleDataPointsSelection: false,
+						filter: {
+							type: 'none',
+						},
 					},
 				},
 				stroke: {
@@ -72,10 +94,10 @@ export default function EnergyChart({ chartData }: EnergyChartProps) {
 			series={[
 				{
 					name: 'Price',
+					type: 'line',
 					data: chartData,
 				},
 			]}
-			type='line'
 		/>
 	)
 }

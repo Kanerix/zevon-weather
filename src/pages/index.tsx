@@ -122,7 +122,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 ) => {
 	return {
 		props: {
-			chartData: [28, 26, 28, 29, 27, 26, 27, 28, 27],
+			chartData: [32, 35, 38, 36, 32, 29, 27, 23, 25],
 		},
 	}
 }

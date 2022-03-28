@@ -5,19 +5,18 @@ export function GlobalChartStyle() {
 		<Global
 			styles={[
 				{
-					'&.apexcharts-canvas:hover': {
+					'&.apexcharts-canvas': {
 						'.apexcharts-xaxistooltip': {
-							background: '#0a0a0a',
+							background: 'rgba(10,10,10,0.8)',
 							border: 'none',
-							opacity: 0.975,
 							borderRadius: 7,
 							'&:before': { display: 'none' },
 							'&:after': { display: 'none' },
 						},
 						'.apexcharts-tooltip.apexcharts-theme-dark': {
-							background: '#0a0a0a',
+							background: 'rgba(10,10,10,0.8)',
+							backdropFilter: 'blur(5px)',
 							boxShadow: 'none',
-							opacity: 0.975,
 							borderRadius: 7,
 						},
 					},
