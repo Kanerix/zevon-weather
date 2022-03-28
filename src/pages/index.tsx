@@ -3,7 +3,11 @@ import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
 
 import EnergyChart from '../components/EnergyChart'
 
-const Home: NextPage = ({ chartData }) => {
+interface Props {
+	chartData: number[]
+}
+
+const Home: NextPage<Props> = ({ chartData }) => {
 	const resultStringyfied = (): string => {
 		let stringify: string = ''
 
@@ -113,7 +117,9 @@ const Home: NextPage = ({ chartData }) => {
 	)
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (
+	context
+) => {
 	return {
 		props: {
 			chartData: [28, 26, 28, 29, 27, 26, 27, 28, 27],
