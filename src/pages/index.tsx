@@ -56,7 +56,7 @@ const Home: NextPage<Props> = ({ chartData }) => {
 				</Text>
 				<Box>
 					<Text>{header}</Text>
-					<Text size='xl'>{price} DKK/Energy</Text>
+					<Text size='xl'>{price} DKK/MWh</Text>
 					<Text>{footer}</Text>
 				</Box>
 			</Box>
@@ -98,7 +98,7 @@ const Home: NextPage<Props> = ({ chartData }) => {
 							marginBottom: '12px',
 						}}
 					>
-						DKK/Energy prices
+						(DKK/MWh)
 					</Text>
 					<Text
 						sx={(theme) => ({
