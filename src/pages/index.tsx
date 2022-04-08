@@ -98,7 +98,7 @@ const Home: NextPage<Props> = ({ chartData }) => {
 							marginBottom: '12px',
 						}}
 					>
-						(DKK/MWh)
+						Energy prices (DKK/MWh)
 					</Text>
 					<Text
 						sx={(theme) => ({
