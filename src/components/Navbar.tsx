@@ -11,9 +11,9 @@ import {
 } from '@mantine/core'
 import {
 	IconApi,
-	IconDatabase,
 	IconHelp,
 	IconHome,
+	IconAlarm,
 	TablerIconProps,
 } from '@tabler/icons'
 
@@ -40,10 +40,10 @@ export default function MyNavbar(props: MyNavbarProps) {
 			icon: <IconHome />,
 		},
 		{
-			path: '/database',
-			label: 'Database',
+			path: '/automation',
+			label: 'Automation',
 			color: 'green',
-			icon: <IconDatabase />,
+			icon: <IconAlarm />,
 		},
 		{
 			path: '/docs',

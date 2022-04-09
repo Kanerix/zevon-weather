@@ -1,7 +1,7 @@
 import { NextPage } from 'next'
 
-const Database: NextPage = () => {
+const Automation: NextPage = () => {
 	return <div>Sexier Karl Marx</div>
 }
 
-export default Database
+export default Automation

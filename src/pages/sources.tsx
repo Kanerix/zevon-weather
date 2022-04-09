@@ -4,6 +4,7 @@ const Sources: NextPage = () => {
 	return (
 		<div>
 			https://www.nordpoolgroup.com/api/navigation/grid
+			<br />
 			https://www.nordpoolgroup.com/api/marketdata/page/11?
 		</div>
 	)
