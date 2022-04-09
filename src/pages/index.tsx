@@ -3,11 +3,60 @@ import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
 
 import EnergyChart from '../components/EnergyChart'
 
-interface Props {
-	chartData: number[]
+interface DataRowColumn {
+	Index: number
+	Name: string
+	CombinedName: string
+	Value: string
+	DateTimeForData: string
 }
 
-const Home: NextPage<Props> = ({ chartData }) => {
+interface DataRow {
+	Name: string
+	Columns: DataRowColumn[]
+}
+
+interface Data {
+	data: {
+		Rows: DataRow[]
+	}
+}
+
+interface Props {
+	chartData: number[]
+	chartSeries: string[]
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async (
+	context
+) => {
+	const data = await fetch(
+		'https://www.nordpoolgroup.com/api/marketdata/page/11?'
+	)
+
+	const json = (await data.json()) as Data
+
+	const chartData = json.data.Rows.map((row) => {
+		return row.Columns.filter((column) => column.Name === 'DK1').map(
+			(column) => parseInt(column.Value)
+		)[0]
+	}).reverse()
+
+	const chartSeries = json.data.Rows.map((row) => {
+		return row.Name
+	}).reverse()
+
+	console.log()
+
+	return {
+		props: {
+			chartData: chartData,
+			chartSeries: chartSeries,
+		},
+	}
+}
+
+const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 	const resultStringyfied = (): string => {
 		let stringify: string = ''
 
@@ -25,11 +74,13 @@ const Home: NextPage<Props> = ({ chartData }) => {
 	}
 
 	const PriceColumn = ({
+		main,
 		color,
 		header,
 		footer,
 		price,
 	}: {
+		main: boolean
 		color: DefaultMantineColor
 		header: string
 		footer: string
@@ -67,26 +118,29 @@ const Home: NextPage<Props> = ({ chartData }) => {
 		<Grid justify='center'>
 			<Grid.Col md={12} lg={4} xl={3}>
 				<PriceColumn
+					main={false}
 					color='green'
-					header='Low'
-					footer='13 away'
-					price={23}
+					header='LOW PRICE'
+					footer={chartData[0] - 50 + ' away'}
+					price={50}
 				/>
 			</Grid.Col>
 			<Grid.Col md={12} lg={4} xl={3}>
 				<PriceColumn
+					main={true}
 					color='blue'
-					header='Medium'
+					header='CURRENT PRICE'
 					footer='5 away'
-					price={32}
+					price={chartData[0]}
 				/>
 			</Grid.Col>
 			<Grid.Col md={12} lg={4} xl={3}>
 				<PriceColumn
+					main={false}
 					color='red'
-					header='High'
-					footer='9 away'
-					price={38}
+					header='HIGH PRICE'
+					footer={120 - chartData[0] + ' away'}
+					price={120}
 				/>
 			</Grid.Col>
 			<Grid.Col xl={9}>
@@ -108,23 +162,16 @@ const Home: NextPage<Props> = ({ chartData }) => {
 							color: theme.colors.gray[6],
 						})}
 					>
-						({resultStringyfied()}%) Last 120 minutes
+						({resultStringyfied()}%) Last month
 					</Text>
-					<EnergyChart chartData={chartData} />
+					<EnergyChart
+						chartData={chartData}
+						chartSeries={chartSeries}
+					/>
 				</Paper>
 			</Grid.Col>
 		</Grid>
 	)
-}
-
-export const getServerSideProps: GetServerSideProps<Props> = async (
-	context
-) => {
-	return {
-		props: {
-			chartData: [32, 35, 38, 36, 32, 29, 27, 23, 25],
-		},
-	}
 }
 
 export default Home

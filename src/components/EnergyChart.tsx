@@ -4,13 +4,13 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface EnergyChartProps {
 	chartData: number[]
+	chartSeries: string[]
 }
 
-export default function EnergyChart({ chartData }: EnergyChartProps) {
-	const average = Math.round(
-		chartData.reduce((a, b) => a + b, 0) / chartData.length
-	)
-
+export default function EnergyChart({
+	chartData,
+	chartSeries,
+}: EnergyChartProps) {
 	return (
 		<Chart
 			options={{
@@ -44,17 +44,7 @@ export default function EnergyChart({ chartData }: EnergyChartProps) {
 					axisTicks: {
 						show: false,
 					},
-					categories: [
-						'120 MIN',
-						'105 MIN',
-						'90 MIN',
-						'75 MIN',
-						'60 MIN',
-						'45 MIN',
-						'30 MIN',
-						'15 MIN',
-						'0 MIN',
-					],
+					categories: chartSeries,
 				},
 				states: {
 					normal: {
