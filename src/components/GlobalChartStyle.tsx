@@ -6,8 +6,9 @@ export function GlobalChartStyle() {
 			styles={[
 				{
 					'&.apexcharts-canvas': {
-						'.apexcharts-xaxistooltip': {
+						'.apexcharts-xaxistooltip.apexcharts-theme-dark': {
 							background: 'rgba(10,10,10,0.8)',
+							backdropFilter: 'blur(2px)',
 							border: 'none',
 							borderRadius: 7,
 							'&:before': { display: 'none' },
@@ -15,7 +16,7 @@ export function GlobalChartStyle() {
 						},
 						'.apexcharts-tooltip.apexcharts-theme-dark': {
 							background: 'rgba(10,10,10,0.8)',
-							backdropFilter: 'blur(5px)',
+							backdropFilter: 'blur(2px)',
 							boxShadow: 'none',
 							borderRadius: 7,
 						},

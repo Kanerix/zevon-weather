@@ -23,64 +23,62 @@ interface Data {
 }
 
 interface Props {
-	chartData: number[]
+	chartData: {
+		eastDenmark: number[]
+		westDenmark: number[]
+	}
 	chartSeries: string[]
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-	context
-) => {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
 	const data = await fetch(
 		'https://www.nordpoolgroup.com/api/marketdata/page/11?'
 	)
 
 	const json = (await data.json()) as Data
 
-	const chartData = json.data.Rows.map((row) => {
-		return row.Columns.filter((column) => column.Name === 'DK1').map(
-			(column) => parseInt(column.Value)
+	let westDenmark: number[] = []
+	let eastDenmark: number[] = []
+
+	json.data.Rows.map((row) => {
+		row.Columns.filter((column) => column.Name.startsWith('DK')).map(
+			(column) => {
+				if (column.Name == 'DK1') {
+					westDenmark.push(parseInt(column.Value))
+				} else {
+					eastDenmark.push(parseInt(column.Value))
+				}
+			}
 		)[0]
-	}).reverse()
+
+		return {
+			westDenmark: westDenmark,
+			eastDenmark: eastDenmark,
+		}
+	})
 
 	const chartSeries = json.data.Rows.map((row) => {
 		return row.Name
 	}).reverse()
 
-	console.log()
-
 	return {
 		props: {
-			chartData: chartData,
+			chartData: {
+				westDenmark: westDenmark,
+				eastDenmark: eastDenmark,
+			},
 			chartSeries: chartSeries,
 		},
 	}
 }
 
 const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
-	const resultStringyfied = (): string => {
-		let stringify: string = ''
-
-		let result = Math.round(
-			(chartData[chartData.length - 1] / chartData[0] - 1) * 100
-		)
-
-		if (result > 0) {
-			stringify += '+'
-		}
-
-		stringify += `${result}`
-
-		return stringify
-	}
-
 	const PriceColumn = ({
-		main,
 		color,
 		header,
 		footer,
 		price,
 	}: {
-		main: boolean
 		color: DefaultMantineColor
 		header: string
 		footer: string
@@ -107,40 +105,66 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 				</Text>
 				<Box>
 					<Text>{header}</Text>
-					<Text size='xl'>{price} DKK/MWh</Text>
+					<Text size='xl'>{price} EUR/MWh</Text>
 					<Text>{footer}</Text>
 				</Box>
 			</Box>
 		</Paper>
 	)
 
+	const AveragePrice = (array: number[]): number => {
+		let sum = 0
+
+		array.forEach((price) => {
+			sum += price
+		})
+
+		return Math.round(sum / chartData.westDenmark.length)
+	}
+
+	const AveragePriceWest = AveragePrice(chartData.westDenmark)
+	const AveragePriceEast = AveragePrice(chartData.eastDenmark)
+
 	return (
 		<Grid justify='center'>
-			<Grid.Col md={12} lg={4} xl={3}>
+			<Grid.Col md={12} lg={6} xl={4.5}>
 				<PriceColumn
-					main={false}
-					color='green'
-					header='LOW PRICE'
-					footer={chartData[0] - 50 + ' away'}
-					price={50}
+					color={
+						AveragePriceEast < AveragePriceWest ? 'red' : 'green'
+					}
+					header='AVERAGE PRICE WEST'
+					footer={`LAST ${chartSeries.length} DAYS`}
+					price={AveragePriceWest}
 				/>
 			</Grid.Col>
-			<Grid.Col md={12} lg={4} xl={3}>
+			<Grid.Col md={12} lg={6} xl={4.5}>
 				<PriceColumn
-					main={true}
+					color={
+						AveragePriceEast > AveragePriceWest ? 'red' : 'green'
+					}
+					header='AVERAGE PRICE EAST'
+					footer={`LAST ${chartSeries.length} DAYS`}
+					price={AveragePriceEast}
+				/>
+			</Grid.Col>
+			<Grid.Col md={12} lg={6} xl={4.5}>
+				<PriceColumn
 					color='blue'
 					header='CURRENT PRICE'
-					footer='5 away'
-					price={chartData[0]}
+					footer='WEST DENMARK'
+					price={
+						chartData.westDenmark[chartData.westDenmark.length - 1]
+					}
 				/>
 			</Grid.Col>
-			<Grid.Col md={12} lg={4} xl={3}>
+			<Grid.Col md={12} lg={6} xl={4.5}>
 				<PriceColumn
-					main={false}
-					color='red'
-					header='HIGH PRICE'
-					footer={120 - chartData[0] + ' away'}
-					price={120}
+					color='blue'
+					header='CURRENT PRICE'
+					footer='EAST DENMARK'
+					price={
+						chartData.eastDenmark[chartData.eastDenmark.length - 1]
+					}
 				/>
 			</Grid.Col>
 			<Grid.Col xl={9}>
@@ -152,17 +176,7 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 							marginBottom: '12px',
 						}}
 					>
-						Energy prices (DKK/MWh)
-					</Text>
-					<Text
-						sx={(theme) => ({
-							fontSize: '18px',
-							fontWeight: '500',
-							marginBottom: '24px',
-							color: theme.colors.gray[6],
-						})}
-					>
-						({resultStringyfied()}%) Last month
+						Energy prices (EUR/MWh)
 					</Text>
 					<EnergyChart
 						chartData={chartData}

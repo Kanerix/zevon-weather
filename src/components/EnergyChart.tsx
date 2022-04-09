@@ -3,7 +3,10 @@ import dynamic from 'next/dynamic'
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface EnergyChartProps {
-	chartData: number[]
+	chartData: {
+		westDenmark: number[]
+		eastDenmark: number[]
+	}
 	chartSeries: string[]
 }
 
@@ -83,9 +86,14 @@ export default function EnergyChart({
 			}}
 			series={[
 				{
-					name: 'Price',
+					name: 'Price west',
 					type: 'line',
-					data: chartData,
+					data: chartData.westDenmark,
+				},
+				{
+					name: 'Price east',
+					type: 'line',
+					data: chartData.eastDenmark,
 				},
 			]}
 		/>
