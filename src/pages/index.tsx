@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
 
-import EnergyChart from '../components/EnergyChart'
+import PowerChart from '../components/PowerChart'
 
 interface DataRowColumn {
 	Index: number
@@ -32,40 +32,49 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
 	const data = await fetch(
-		'https://www.nordpoolgroup.com/api/marketdata/page/11?'
+		'https://www.nordpoolgroup.com/api/marketdata/page/10?currency=,,DKK,DKK'
 	)
 
 	const json = (await data.json()) as Data
 
-	let westDenmark: number[] = []
-	let eastDenmark: number[] = []
+	let eastDenmark = []
+	let westDenmark = []
+	let chartSeries = []
 
-	json.data.Rows.map((row) => {
-		row.Columns.filter((column) => column.Name.startsWith('DK')).map(
-			(column) => {
-				if (column.Name == 'DK1') {
-					westDenmark.push(parseInt(column.Value))
-				} else {
-					eastDenmark.push(parseInt(column.Value))
-				}
-			}
-		)[0]
-
-		return {
-			westDenmark: westDenmark,
-			eastDenmark: eastDenmark,
+	for (let row of json.data.Rows) {
+		if (
+			[
+				'Min',
+				'Max',
+				'Average',
+				'Peak',
+				'Off-peak 1',
+				'Off-peak 2',
+			].filter((i) => i === row.Name).length > 0
+		) {
+			continue
 		}
-	})
 
-	const chartSeries = json.data.Rows.map((row) => {
-		return row.Name
-	}).reverse()
+		chartSeries.unshift('Kl. ' + row.Name.replaceAll('&nbsp;', ' '))
+
+		for (let column of row.Columns.filter((column) =>
+			column.Name.startsWith('DK')
+		)) {
+			if (column.Name == 'DK1') {
+				eastDenmark.unshift(parseInt(column.Value.replaceAll(' ', '')))
+			} else {
+				westDenmark.unshift(parseInt(column.Value.replaceAll(' ', '')))
+			}
+		}
+	}
+
+	console.log(chartSeries)
 
 	return {
 		props: {
 			chartData: {
-				westDenmark: westDenmark,
-				eastDenmark: eastDenmark,
+				westDenmark: eastDenmark,
+				eastDenmark: westDenmark,
 			},
 			chartSeries: chartSeries,
 		},
@@ -105,7 +114,7 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 				</Text>
 				<Box>
 					<Text>{header}</Text>
-					<Text size='xl'>{price} EUR/MWh</Text>
+					<Text size='xl'>{price} DKK/MWh</Text>
 					<Text>{footer}</Text>
 				</Box>
 			</Box>
@@ -176,9 +185,26 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 							marginBottom: '12px',
 						}}
 					>
-						Energy prices (EUR/MWh)
+						Power price predictions for
+						{' ' +
+							(() => {
+								const today = new Date()
+
+								let tomorrow = new Date()
+								tomorrow.setDate(today.getDate() + 1)
+
+								return tomorrow.toDateString()
+							})()}
 					</Text>
-					<EnergyChart
+					<Text
+						size='xl'
+						sx={{
+							marginBottom: '12px',
+						}}
+					>
+						Power prices (DKK/MWh)
+					</Text>
+					<PowerChart
 						chartData={chartData}
 						chartSeries={chartSeries}
 					/>
