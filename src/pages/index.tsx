@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
 
 import PowerChart from '../components/PowerChart'
@@ -30,9 +30,9 @@ interface Props {
 	chartSeries: string[]
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+export const getStaticProps: GetStaticProps<Props> = async () => {
 	const data = await fetch(
-		'https://www.nordpoolgroup.com/api/marketdata/page/10?currency=,,DKK,DKK'
+		'https://www.nordpoolgroup.com/api/marketdata/page/11?currency=,,DKK,DKK'
 	)
 
 	const json = (await data.json()) as Data
@@ -42,20 +42,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
 	let chartSeries = []
 
 	for (let row of json.data.Rows) {
-		if (
-			[
-				'Min',
-				'Max',
-				'Average',
-				'Peak',
-				'Off-peak 1',
-				'Off-peak 2',
-			].filter((i) => i === row.Name).length > 0
-		) {
-			continue
-		}
-
-		chartSeries.unshift('Kl. ' + row.Name.replaceAll('&nbsp;', ' '))
+		chartSeries.unshift(row.Name)
 
 		for (let column of row.Columns.filter((column) =>
 			column.Name.startsWith('DK')
@@ -67,8 +54,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
 			}
 		}
 	}
-
-	console.log(chartSeries)
 
 	return {
 		props: {
@@ -121,18 +106,16 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 		</Paper>
 	)
 
-	const AveragePrice = (array: number[]): number => {
-		let sum = 0
-
-		array.forEach((price) => {
-			sum += price
-		})
-
-		return Math.round(sum / chartData.westDenmark.length)
-	}
+	const AveragePrice = (array: number[]): number =>
+		Math.round(array.reduce((a, b) => a + b, 0) / array.length)
 
 	const AveragePriceWest = AveragePrice(chartData.westDenmark)
 	const AveragePriceEast = AveragePrice(chartData.eastDenmark)
+
+	const CurrentPriceWest =
+		chartData.westDenmark[chartData.westDenmark.length - 1]
+	const CurrentPriceEast =
+		chartData.eastDenmark[chartData.eastDenmark.length - 1]
 
 	return (
 		<Grid justify='center'>
@@ -158,22 +141,22 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 			</Grid.Col>
 			<Grid.Col md={12} lg={6} xl={4.5}>
 				<PriceColumn
-					color='blue'
+					color={
+						CurrentPriceEast < CurrentPriceWest ? 'red' : 'green'
+					}
 					header='CURRENT PRICE'
 					footer='WEST DENMARK'
-					price={
-						chartData.westDenmark[chartData.westDenmark.length - 1]
-					}
+					price={CurrentPriceWest}
 				/>
 			</Grid.Col>
 			<Grid.Col md={12} lg={6} xl={4.5}>
 				<PriceColumn
-					color='blue'
+					color={
+						CurrentPriceEast > CurrentPriceWest ? 'red' : 'green'
+					}
 					header='CURRENT PRICE'
 					footer='EAST DENMARK'
-					price={
-						chartData.eastDenmark[chartData.eastDenmark.length - 1]
-					}
+					price={CurrentPriceEast}
 				/>
 			</Grid.Col>
 			<Grid.Col xl={9}>
@@ -185,16 +168,7 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 							marginBottom: '12px',
 						}}
 					>
-						Power price predictions for
-						{' ' +
-							(() => {
-								const today = new Date()
-
-								let tomorrow = new Date()
-								tomorrow.setDate(today.getDate() + 1)
-
-								return tomorrow.toDateString()
-							})()}
+						Power prices last month
 					</Text>
 					<Text
 						size='xl'
