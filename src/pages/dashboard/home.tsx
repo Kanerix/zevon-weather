@@ -1,7 +1,7 @@
 import type { GetStaticProps, NextPage } from 'next'
 import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
 
-import PowerChart from '../components/PowerChart'
+import PowerChart from '../../components/PowerChart'
 
 interface DataRowColumn {
 	Index: number

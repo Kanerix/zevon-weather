@@ -21,7 +21,7 @@ export default function App(props: AppProps) {
 					content='minimum-scale=1, initial-scale=1, width=device-width'
 				/>
 			</Head>
-			<GlobalChartStyle />
+			<GlobalChartStyle />;
 			<MantineProvider
 				withGlobalStyles
 				withNormalizeCSS
@@ -30,18 +30,7 @@ export default function App(props: AppProps) {
 					fontFamily: 'Poppins',
 				}}
 			>
-				<AppShell
-					navbar={<MyNavbar open={open} setOpen={setOpen} />}
-					header={<MyHeader open={open} setOpen={setOpen} />}
-					fixed
-					styles={(theme) => ({
-						main: {
-							backgroundColor: theme.colors.dark[8],
-						},
-					})}
-				>
-					<Component {...pageProps} />
-				</AppShell>
+				<Component {...pageProps} />
 			</MantineProvider>
 		</>
 	)

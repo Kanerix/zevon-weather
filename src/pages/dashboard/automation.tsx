@@ -1,8 +1,8 @@
 import type { GetStaticProps, NextPage } from 'next'
 import { Grid, Paper, Text } from '@mantine/core'
 
-import { Data } from '../@types/powerData'
-import PowerChart from '../components/PowerChart'
+import { Data } from '../../@types/powerData'
+import PowerChart from '../../components/PowerChart'
 
 export interface Props {
 	chartData: {
