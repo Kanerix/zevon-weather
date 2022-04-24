@@ -15,7 +15,6 @@
 		"@mantine/hooks": "^4.0.7",
 		"@mantine/next": "^4.0.7",
 		"@tabler/icons": "^1.58.0",
-		"@types/jsonwebtoken": "^8.5.8",
 		"apexcharts": "^3.33.2",
 		"jsonwebtoken": "^8.5.1",
 		"next": "12.1.0",
@@ -27,6 +26,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.17.8",
 		"@types/jest": "^27.4.1",
+		"@types/jsonwebtoken": "^8.5.8",
 		"@types/node": "17.0.23",
 		"@types/react": "17.0.42",
 		"@typescript-eslint/eslint-plugin": "^5.16.0",

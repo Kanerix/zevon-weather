@@ -7,7 +7,7 @@ import MyNavbar from '../components/Navbar'
 import MyHeader from '../components/Header'
 import { GlobalChartStyle } from '../components/GlobalChartStyle'
 
-export default function App(props: AppProps) {
+export default function (props: AppProps) {
 	const [open, setOpen] = useState(false)
 
 	const { Component, pageProps } = props
