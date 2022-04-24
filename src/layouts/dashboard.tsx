@@ -4,7 +4,7 @@ import { AppShell } from '@mantine/core'
 import MyNavbar from '../components/Navbar'
 import MyHeader from '../components/Header'
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
 	const [open, setOpen] = useState(false)
 
 	return (

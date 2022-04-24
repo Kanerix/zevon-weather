@@ -3,6 +3,7 @@ import { Grid, Paper, Text } from '@mantine/core'
 
 import { Data } from '../../@types/powerData'
 import PowerChart from '../../components/PowerChart'
+import DashboardLayout from '../../layouts/dashboard'
 
 export interface Props {
 	chartData: {
@@ -63,42 +64,44 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
 const Automation: NextPage<Props> = ({ chartData, chartSeries }) => {
 	return (
-		<Grid justify='center'>
-			<Grid.Col xl={9}>
-				<Paper p='xl'>
-					<Text
-						sx={{
-							fontSize: '28px',
-							fontWeight: '500',
-							marginBottom: '12px',
-						}}
-					>
-						Power price predictions for
-						{' ' +
-							(() => {
-								const today = new Date()
+		<DashboardLayout>
+			<Grid justify='center'>
+				<Grid.Col xl={9}>
+					<Paper p='xl'>
+						<Text
+							sx={{
+								fontSize: '28px',
+								fontWeight: '500',
+								marginBottom: '12px',
+							}}
+						>
+							Power price predictions for
+							{' ' +
+								(() => {
+									const today = new Date()
 
-								let tomorrow = new Date()
-								tomorrow.setDate(today.getDate() + 1)
+									let tomorrow = new Date()
+									tomorrow.setDate(today.getDate() + 1)
 
-								return tomorrow.toDateString()
-							})()}
-					</Text>
-					<Text
-						size='xl'
-						sx={{
-							marginBottom: '12px',
-						}}
-					>
-						Power prices (DKK/MWh)
-					</Text>
-					<PowerChart
-						chartData={chartData}
-						chartSeries={chartSeries}
-					/>
-				</Paper>
-			</Grid.Col>
-		</Grid>
+									return tomorrow.toDateString()
+								})()}
+						</Text>
+						<Text
+							size='xl'
+							sx={{
+								marginBottom: '12px',
+							}}
+						>
+							Power prices (DKK/MWh)
+						</Text>
+						<PowerChart
+							chartData={chartData}
+							chartSeries={chartSeries}
+						/>
+					</Paper>
+				</Grid.Col>
+			</Grid>
+		</DashboardLayout>
 	)
 }
 export default Automation

@@ -2,6 +2,7 @@ import type { GetStaticProps, NextPage } from 'next'
 import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
 
 import PowerChart from '../../components/PowerChart'
+import DashboardLayout from '../../layouts/dashboard'
 
 interface DataRowColumn {
 	Index: number
@@ -118,73 +119,83 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 		chartData.eastDenmark[chartData.eastDenmark.length - 1]
 
 	return (
-		<Grid justify='center'>
-			<Grid.Col md={12} lg={6} xl={4.5}>
-				<PriceColumn
-					color={
-						AveragePriceEast < AveragePriceWest ? 'red' : 'green'
-					}
-					header='AVERAGE PRICE WEST'
-					footer={`LAST ${chartSeries.length} DAYS`}
-					price={AveragePriceWest}
-				/>
-			</Grid.Col>
-			<Grid.Col md={12} lg={6} xl={4.5}>
-				<PriceColumn
-					color={
-						AveragePriceEast > AveragePriceWest ? 'red' : 'green'
-					}
-					header='AVERAGE PRICE EAST'
-					footer={`LAST ${chartSeries.length} DAYS`}
-					price={AveragePriceEast}
-				/>
-			</Grid.Col>
-			<Grid.Col md={12} lg={6} xl={4.5}>
-				<PriceColumn
-					color={
-						CurrentPriceEast < CurrentPriceWest ? 'red' : 'green'
-					}
-					header='CURRENT PRICE'
-					footer='WEST DENMARK'
-					price={CurrentPriceWest}
-				/>
-			</Grid.Col>
-			<Grid.Col md={12} lg={6} xl={4.5}>
-				<PriceColumn
-					color={
-						CurrentPriceEast > CurrentPriceWest ? 'red' : 'green'
-					}
-					header='CURRENT PRICE'
-					footer='EAST DENMARK'
-					price={CurrentPriceEast}
-				/>
-			</Grid.Col>
-			<Grid.Col xl={9}>
-				<Paper p='xl'>
-					<Text
-						sx={{
-							fontSize: '28px',
-							fontWeight: '500',
-							marginBottom: '12px',
-						}}
-					>
-						Power prices last month
-					</Text>
-					<Text
-						size='xl'
-						sx={{
-							marginBottom: '12px',
-						}}
-					>
-						Power prices (DKK/MWh)
-					</Text>
-					<PowerChart
-						chartData={chartData}
-						chartSeries={chartSeries}
+		<DashboardLayout>
+			<Grid justify='center'>
+				<Grid.Col md={12} lg={6} xl={4.5}>
+					<PriceColumn
+						color={
+							AveragePriceEast < AveragePriceWest
+								? 'red'
+								: 'green'
+						}
+						header='AVERAGE PRICE WEST'
+						footer={`LAST ${chartSeries.length} DAYS`}
+						price={AveragePriceWest}
 					/>
-				</Paper>
-			</Grid.Col>
-		</Grid>
+				</Grid.Col>
+				<Grid.Col md={12} lg={6} xl={4.5}>
+					<PriceColumn
+						color={
+							AveragePriceEast > AveragePriceWest
+								? 'red'
+								: 'green'
+						}
+						header='AVERAGE PRICE EAST'
+						footer={`LAST ${chartSeries.length} DAYS`}
+						price={AveragePriceEast}
+					/>
+				</Grid.Col>
+				<Grid.Col md={12} lg={6} xl={4.5}>
+					<PriceColumn
+						color={
+							CurrentPriceEast < CurrentPriceWest
+								? 'red'
+								: 'green'
+						}
+						header='CURRENT PRICE'
+						footer='WEST DENMARK'
+						price={CurrentPriceWest}
+					/>
+				</Grid.Col>
+				<Grid.Col md={12} lg={6} xl={4.5}>
+					<PriceColumn
+						color={
+							CurrentPriceEast > CurrentPriceWest
+								? 'red'
+								: 'green'
+						}
+						header='CURRENT PRICE'
+						footer='EAST DENMARK'
+						price={CurrentPriceEast}
+					/>
+				</Grid.Col>
+				<Grid.Col xl={9}>
+					<Paper p='xl'>
+						<Text
+							sx={{
+								fontSize: '28px',
+								fontWeight: '500',
+								marginBottom: '12px',
+							}}
+						>
+							Power prices last month
+						</Text>
+						<Text
+							size='xl'
+							sx={{
+								marginBottom: '12px',
+							}}
+						>
+							Power prices (DKK/MWh)
+						</Text>
+						<PowerChart
+							chartData={chartData}
+							chartSeries={chartSeries}
+						/>
+					</Paper>
+				</Grid.Col>
+			</Grid>
+		</DashboardLayout>
 	)
 }
 
