@@ -1,10 +1,8 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import { AppShell, MantineProvider } from '@mantine/core'
+import { MantineProvider } from '@mantine/core'
 import { useState } from 'react'
 
-import MyNavbar from '../components/Navbar'
-import MyHeader from '../components/Header'
 import { GlobalChartStyle } from '../components/GlobalChartStyle'
 
 export default function (props: AppProps) {
