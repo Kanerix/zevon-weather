@@ -8,18 +8,18 @@ const middleware = (req: NextRequest, ev: NextFetchEvent) => {
 
 	const jwt = cookies.auth
 
-	const url = req.url
+	const { pathname, origin } = req.nextUrl
 
-	if (url.includes('/dashboard')) {
+	if (pathname.includes('/dashboard')) {
 		if (!jwt || !secret) {
-			return NextResponse.redirect('/login')
+			return NextResponse.redirect(origin + '/login')
 		}
 		try {
 			verify(jwt, secret)
 
 			return NextResponse.next()
 		} catch (error) {
-			return NextResponse.redirect('/login')
+			return NextResponse.redirect(origin + '/login')
 		}
 	}
 

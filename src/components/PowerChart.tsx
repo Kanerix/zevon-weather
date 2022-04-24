@@ -67,6 +67,11 @@ export default function PowerChart({
 						},
 					},
 				},
+				yaxis: {
+					labels: {
+						formatter: (value) => value + ' DKK',
+					},
+				},
 				stroke: {
 					curve: 'smooth',
 					lineCap: 'round',

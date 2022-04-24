@@ -34,25 +34,25 @@ export default function MyNavbar(props: MyNavbarProps) {
 
 	const pages: Page[] = [
 		{
-			path: '/',
+			path: '/dashboard/home',
 			label: 'Home',
 			color: 'blue',
 			icon: <IconHome />,
 		},
 		{
-			path: '/automation',
+			path: '/dashboard/automation',
 			label: 'Automation',
 			color: 'green',
 			icon: <IconAlarm />,
 		},
 		{
-			path: '/docs',
+			path: '/dashboard/documentation',
 			label: 'Docs',
 			color: 'violet',
 			icon: <IconApi />,
 		},
 		{
-			path: '/sources',
+			path: '/dashboard/sources',
 			label: 'Sources',
 			color: 'red',
 			icon: <IconHelp />,
