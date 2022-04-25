@@ -3,25 +3,7 @@ import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
 
 import PowerChart from '../../components/PowerChart'
 import DashboardLayout from '../../layouts/dashboard'
-
-interface DataRowColumn {
-	Index: number
-	Name: string
-	CombinedName: string
-	Value: string
-	DateTimeForData: string
-}
-
-interface DataRow {
-	Name: string
-	Columns: DataRowColumn[]
-}
-
-interface Data {
-	data: {
-		Rows: DataRow[]
-	}
-}
+import { Data } from '../../@types/powerData'
 
 interface Props {
 	chartData: {

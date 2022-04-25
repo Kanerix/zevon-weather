@@ -4,6 +4,7 @@ import { Grid, Paper, Text } from '@mantine/core'
 import { Data } from '../../@types/powerData'
 import PowerChart from '../../components/PowerChart'
 import DashboardLayout from '../../layouts/dashboard'
+import { useAuth } from '../../context/auth'
 
 export interface Props {
 	chartData: {
@@ -63,6 +64,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 }
 
 const Automation: NextPage<Props> = ({ chartData, chartSeries }) => {
+	const user = useAuth()
+
 	return (
 		<DashboardLayout>
 			<Grid justify='center'>
@@ -104,4 +107,5 @@ const Automation: NextPage<Props> = ({ chartData, chartSeries }) => {
 		</DashboardLayout>
 	)
 }
+
 export default Automation

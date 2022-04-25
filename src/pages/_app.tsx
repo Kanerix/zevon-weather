@@ -4,6 +4,7 @@ import { MantineProvider } from '@mantine/core'
 import { useState } from 'react'
 
 import { GlobalChartStyle } from '../components/GlobalChartStyle'
+import AuthProvider from '../context/auth'
 
 export default function (props: AppProps) {
 	const [open, setOpen] = useState(false)
@@ -20,16 +21,18 @@ export default function (props: AppProps) {
 				/>
 			</Head>
 			<GlobalChartStyle />
-			<MantineProvider
-				withGlobalStyles
-				withNormalizeCSS
-				theme={{
-					colorScheme: 'dark',
-					fontFamily: 'Poppins',
-				}}
-			>
-				<Component {...pageProps} />
-			</MantineProvider>
+			<AuthProvider>
+				<MantineProvider
+					withGlobalStyles
+					withNormalizeCSS
+					theme={{
+						colorScheme: 'dark',
+						fontFamily: 'Poppins',
+					}}
+				>
+					<Component {...pageProps} />
+				</MantineProvider>
+			</AuthProvider>
 		</>
 	)
 }
