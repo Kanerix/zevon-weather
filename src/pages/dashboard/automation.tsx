@@ -1,10 +1,10 @@
-import type { GetStaticProps, NextPage } from 'next'
-import { Box, Divider, Grid, Paper, Text } from '@mantine/core'
+import type { GetServerSideProps, NextPage } from 'next'
+import { extractSystemStyles, Grid, Paper, Text } from '@mantine/core'
 
 import { Data } from '../../@types/powerData'
-import PowerChart from '../../components/PowerChart'
 import DashboardLayout from '../../layouts/dashboard'
 import { DashbaordHeader } from '../../components/DashboardHeader'
+import PowerChart from '../../components/PowerChart'
 
 export interface Props {
 	error: null | string
@@ -15,7 +15,9 @@ export interface Props {
 	chartSeries: string[]
 }
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async (
+	context
+) => {
 	const data = await fetch(
 		'https://www.nordpoolgroup.com/api/marketdata/page/10?currency=,,DKK,DKK'
 	)

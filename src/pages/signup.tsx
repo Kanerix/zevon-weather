@@ -24,7 +24,7 @@ const Signup: NextPage = () => {
 	})
 
 	const handleSubmit = async (values: typeof form.values) => {
-		const res = fetch('/api/signup', {
+		const res = await fetch('/api/signup', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -33,7 +33,8 @@ const Signup: NextPage = () => {
 		})
 
 		try {
-			const data = (await res).json() as unknown as SignupResponse
+			const data = (await res.json()) as unknown as SignupResponse
+			console.log(data)
 			if (data.error) {
 				showNotification({
 					id: 'error',

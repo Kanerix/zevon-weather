@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+import prisma from '../../lib/prisma'
 import { SignupResponse } from '../../@types/api'
+import { sign } from 'jsonwebtoken'
 
 export default async function handler(
 	req: NextApiRequest,
@@ -20,19 +22,20 @@ export default async function handler(
 		}
 
 		if (password !== confirmPassword) {
-			res.status(400).json({ error: 'Password does not match' })
+			res.status(400).json({ error: 'Passwords does not match' })
 			return
 		}
 
-		prisma.user.create({
-			data: {
-				username,
-				email,
-				password,
-			},
+		const user = await prisma.user.create({
+			data: { username: username, email: email, password: password },
 		})
+
+		const jwt = sign(user.username, process.env.JWT_SECRET!)
+
+		res.status(200).json({ token: jwt })
+		return
 	} catch (error) {
 		console.log(error)
+		return
 	}
-	return
 }

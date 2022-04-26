@@ -8,8 +8,8 @@ import {
 } from 'react'
 
 interface AuthContext {
-	jwt: string | undefined
-	setJwt: Dispatch<SetStateAction<string | undefined>>
+	token: string | undefined
+	setToken: Dispatch<SetStateAction<string | undefined>>
 }
 
 const authContext = createContext<AuthContext | undefined>(undefined)
@@ -26,14 +26,13 @@ export function useAuth(): AuthContext {
 
 interface AuthProviderProps {
 	children: ReactNode
-	jwt?: string
 }
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-	const [jwt, setJwt] = useState<string | undefined>()
+	const [token, setToken] = useState<string | undefined>()
 
 	return (
-		<authContext.Provider value={{ jwt, setJwt }}>
+		<authContext.Provider value={{ token, setToken }}>
 			{children}
 		</authContext.Provider>
 	)
