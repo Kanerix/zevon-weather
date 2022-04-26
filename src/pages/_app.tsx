@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 import { GlobalChartStyle } from '../components/GlobalChartStyle'
 import AuthProvider from '../context/auth'
+import { NotificationsProvider } from '@mantine/notifications'
 
 export default function (props: AppProps) {
 	const [open, setOpen] = useState(false)
@@ -28,10 +29,11 @@ export default function (props: AppProps) {
 					theme={{
 						colorScheme: 'dark',
 						fontFamily: 'Poppins',
-						colors: {},
 					}}
 				>
-					<Component {...pageProps} />
+					<NotificationsProvider>
+						<Component {...pageProps} />
+					</NotificationsProvider>
 				</MantineProvider>
 			</AuthProvider>
 		</>

@@ -1,18 +1,38 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-type SignupData = {
-	name: string
-	email: string
-	password: string
-}
+import { SignupResponse } from '../../@types/api'
 
-export default function handler(
+export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse<SignupData>
+	res: NextApiResponse<SignupResponse>
 ) {
 	if (req.method !== 'POST') {
 		res.status(400).end('Bad request')
 		return
 	}
-	// Create user
+
+	try {
+		const { username, email, password, confirmPassword } = req.body
+
+		if (!/^\S+@\S+$/.test(email)) {
+			res.status(400).json({ error: 'Invalid email' })
+			return
+		}
+
+		if (password !== confirmPassword) {
+			res.status(400).json({ error: 'Password does not match' })
+			return
+		}
+
+		prisma.user.create({
+			data: {
+				username,
+				email,
+				password,
+			},
+		})
+	} catch (error) {
+		console.log(error)
+	}
+	return
 }

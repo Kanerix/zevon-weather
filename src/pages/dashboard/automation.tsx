@@ -1,12 +1,13 @@
 import type { GetStaticProps, NextPage } from 'next'
-import { Grid, Paper, Text } from '@mantine/core'
+import { Box, Divider, Grid, Paper, Text } from '@mantine/core'
 
 import { Data } from '../../@types/powerData'
 import PowerChart from '../../components/PowerChart'
 import DashboardLayout from '../../layouts/dashboard'
-import { useAuth } from '../../context/auth'
+import { DashbaordHeader } from '../../components/DashboardHeader'
 
 export interface Props {
+	error: null | string
 	chartData: {
 		eastDenmark: number[]
 		westDenmark: number[]
@@ -24,36 +25,46 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 	let eastDenmark = []
 	let westDenmark = []
 	let chartSeries = []
+	let error = ''
 
-	for (let row of json.data.Rows) {
-		if (
-			[
-				'Min',
-				'Max',
-				'Average',
-				'Peak',
-				'Off-peak 1',
-				'Off-peak 2',
-			].includes(row.Name)
-		) {
-			continue
-		}
+	try {
+		for (let row of json.data.Rows) {
+			if (
+				[
+					'Min',
+					'Max',
+					'Average',
+					'Peak',
+					'Off-peak 1',
+					'Off-peak 2',
+				].includes(row.Name)
+			) {
+				continue
+			}
 
-		chartSeries.unshift('Kl. ' + row.Name.replaceAll('&nbsp;', ' '))
+			chartSeries.unshift('Kl. ' + row.Name.replaceAll('&nbsp;', ' '))
 
-		for (let column of row.Columns.filter((column) =>
-			column.Name.startsWith('DK')
-		)) {
-			if (column.Name == 'DK1') {
-				eastDenmark.unshift(parseInt(column.Value.replaceAll(' ', '')))
-			} else {
-				westDenmark.unshift(parseInt(column.Value.replaceAll(' ', '')))
+			for (let column of row.Columns.filter((column) =>
+				column.Name.startsWith('DK')
+			)) {
+				if (column.Name == 'DK1') {
+					eastDenmark.unshift(
+						parseInt(column.Value.replaceAll(' ', ''))
+					)
+				} else {
+					westDenmark.unshift(
+						parseInt(column.Value.replaceAll(' ', ''))
+					)
+				}
 			}
 		}
+	} catch (e) {
+		error = 'Failed to fetch data!'
 	}
 
 	return {
 		props: {
+			error: error || null,
 			chartData: {
 				westDenmark: eastDenmark,
 				eastDenmark: westDenmark,
@@ -64,11 +75,12 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 }
 
 const Automation: NextPage<Props> = ({ chartData, chartSeries }) => {
-	const user = useAuth()
-
 	return (
 		<DashboardLayout>
 			<Grid justify='center'>
+				<Grid.Col xl={9}>
+					<DashbaordHeader header='Automation' />
+				</Grid.Col>
 				<Grid.Col xl={9}>
 					<Paper p='xl'>
 						<Text

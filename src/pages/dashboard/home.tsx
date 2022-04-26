@@ -4,8 +4,10 @@ import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
 import PowerChart from '../../components/PowerChart'
 import DashboardLayout from '../../layouts/dashboard'
 import { Data } from '../../@types/powerData'
+import { DashbaordHeader } from '../../components/DashboardHeader'
 
 interface Props {
+	error: null | string
 	chartData: {
 		eastDenmark: number[]
 		westDenmark: number[]
@@ -23,23 +25,33 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 	let eastDenmark = []
 	let westDenmark = []
 	let chartSeries = []
+	let error = ''
 
-	for (let row of json.data.Rows) {
-		chartSeries.unshift(row.Name)
+	try {
+		for (let row of json.data.Rows) {
+			chartSeries.unshift(row.Name)
 
-		for (let column of row.Columns.filter((column) =>
-			column.Name.startsWith('DK')
-		)) {
-			if (column.Name == 'DK1') {
-				eastDenmark.unshift(parseInt(column.Value.replaceAll(' ', '')))
-			} else {
-				westDenmark.unshift(parseInt(column.Value.replaceAll(' ', '')))
+			for (let column of row.Columns.filter((column) =>
+				column.Name.startsWith('DK')
+			)) {
+				if (column.Name == 'DK1') {
+					eastDenmark.unshift(
+						parseInt(column.Value.replaceAll(' ', ''))
+					)
+				} else {
+					westDenmark.unshift(
+						parseInt(column.Value.replaceAll(' ', ''))
+					)
+				}
 			}
 		}
+	} catch (e) {
+		error = 'Failed to fetch data!'
 	}
 
 	return {
 		props: {
+			error: error || null,
 			chartData: {
 				westDenmark: eastDenmark,
 				eastDenmark: westDenmark,
@@ -103,6 +115,9 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 	return (
 		<DashboardLayout>
 			<Grid justify='center'>
+				<Grid.Col xl={9}>
+					<DashbaordHeader header='Dashboard' />
+				</Grid.Col>
 				<Grid.Col md={12} lg={6} xl={4.5}>
 					<PriceColumn
 						color={
