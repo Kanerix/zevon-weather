@@ -134,8 +134,8 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 								? 'red'
 								: 'green'
 						}
-						header='CURRENT PRICE'
-						footer='WEST DENMARK'
+						header='WEST DENMARK'
+						footer='CURRENT PRICE'
 						price={CurrentPriceWest}
 					/>
 				</Grid.Col>
@@ -146,8 +146,8 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 								? 'red'
 								: 'green'
 						}
-						header='CURRENT PRICE'
-						footer='EAST DENMARK'
+						header='EAST DENMARK'
+						footer='CURRENT PRICE'
 						price={CurrentPriceEast}
 					/>
 				</Grid.Col>

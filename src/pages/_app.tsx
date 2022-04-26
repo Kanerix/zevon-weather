@@ -28,6 +28,7 @@ export default function (props: AppProps) {
 					theme={{
 						colorScheme: 'dark',
 						fontFamily: 'Poppins',
+						colors: {},
 					}}
 				>
 					<Component {...pageProps} />

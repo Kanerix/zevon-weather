@@ -4,30 +4,36 @@ export default function Custom404() {
 	return (
 		<Box
 			sx={{
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				height: '100%',
+				height: '100vh',
+				width: '100%',
 			}}
 		>
-			<Text
-				size='xl'
+			<Box
 				sx={{
-					borderRight: '1px solid',
-					paddingRight: '8px',
-					marginRight: '8px',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
 				}}
 			>
-				404
-			</Text>
-			<Text
-				size='xl'
-				sx={{
-					textAlign: 'center',
-				}}
-			>
-				Siden blev ikke fundet
-			</Text>
+				<Text
+					size='xl'
+					sx={{
+						borderRight: '1px solid',
+						paddingRight: '8px',
+						marginRight: '8px',
+					}}
+				>
+					404
+				</Text>
+				<Text
+					size='xl'
+					sx={{
+						textAlign: 'center',
+					}}
+				>
+					Siden blev ikke fundet
+				</Text>
+			</Box>
 		</Box>
 	)
 }
