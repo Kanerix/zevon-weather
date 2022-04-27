@@ -9,6 +9,11 @@ import { SignupResponse } from '../@types/api'
 import axios from 'axios'
 
 const Signup: NextPage = () => {
+<<<<<<< HEAD
+=======
+	const auth = useAuth()
+
+>>>>>>> main
 	const form = useForm({
 		initialValues: {
 			email: '',
@@ -31,7 +36,34 @@ const Signup: NextPage = () => {
 			body: JSON.stringify(values),
 		})
 
+<<<<<<< HEAD
 		if (res.ok) {
+=======
+		try {
+			const data = (await res.json()) as unknown as SignupResponse
+			console.log(data)
+			if (data.error) {
+				showNotification({
+					id: 'error',
+					autoClose: 5000,
+					title: 'Error:',
+					message: data.error,
+					color: 'red',
+					icon: <IconAlertCircle />,
+				})
+				return
+			}
+
+			if (data.token) {
+				auth.setToken(data.token)
+				return
+			}
+
+			throw new Error('Auth servers seems to be down')
+		} catch (error) {
+			console.log(error)
+
+>>>>>>> main
 			showNotification({
 				id: 'signupError',
 				autoClose: 5000,

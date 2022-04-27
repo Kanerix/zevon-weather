@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { sign } from 'jsonwebtoken'
 
 import prisma from '../../lib/prisma'
 import { SignupResponse } from '../../@types/api'
