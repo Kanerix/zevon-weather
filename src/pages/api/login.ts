@@ -12,7 +12,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	try {
-		const { username, password } = req.body
+		const { username, password } = JSON.parse(req.body.body)
 
 		if (typeof username !== 'string' || typeof password !== 'string') {
 			console.log(typeof username, ' ', typeof password)
@@ -44,6 +44,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
 		return
 	} catch (error) {
 		console.error(error)
+		res.status(500).json({ error: 'Internal server error' })
 		return
 	}
 }

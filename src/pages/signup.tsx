@@ -5,6 +5,9 @@ import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { IconAlertCircle } from '@tabler/icons'
 
+import useUser from '../lib/useUser'
+import axios from 'axios'
+
 const Signup: NextPage = () => {
 	const form = useForm({
 		initialValues: {
@@ -19,25 +22,32 @@ const Signup: NextPage = () => {
 		},
 	})
 
-	const handleSubmit = async (values: typeof form.values) => {
-		const res = await fetch('/api/signup', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(values),
-		})
+	const { mutateUser } = useUser({
+		redirectTo: '/dashboard/home',
+	})
 
-		if (res.ok) {
-			showNotification({
-				id: 'signupError',
-				autoClose: 5000,
-				title: 'Error:',
-				message: res.body,
-				color: 'red',
-				icon: <IconAlertCircle />,
-			})
-		}
+	const handleSubmit = async (values: typeof form.values) => {
+		mutateUser(async () => {
+			try {
+				const res = await axios.post('/api/signup', {
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(values),
+				})
+
+				return await res.data
+			} catch (error: any) {
+				showNotification({
+					id: 'error',
+					autoClose: 5000,
+					title: 'Error:',
+					message: error.message,
+					color: 'red',
+					icon: <IconAlertCircle />,
+				})
+			}
+		})
 	}
 
 	return (

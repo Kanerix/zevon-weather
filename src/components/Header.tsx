@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react'
 import Link from 'next/link'
 import {
 	Text,
@@ -8,9 +9,13 @@ import {
 	MediaQuery,
 	Burger,
 	useMantineTheme,
+	Button,
 } from '@mantine/core'
 import { IconCloud } from '@tabler/icons'
-import { Dispatch, SetStateAction } from 'react'
+
+import useUser from '../lib/useUser'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 interface MyHeaderProps {
 	open: boolean
@@ -20,6 +25,20 @@ interface MyHeaderProps {
 export default function MyHeader(props: MyHeaderProps) {
 	const theme = useMantineTheme()
 
+	const router = useRouter()
+
+	const { mutateUser } = useUser()
+
+	const handleLogout = () => {
+		mutateUser(async () => {
+			const res = await axios.post('/api/logout')
+
+			return await res.data
+		}, false)
+
+		router.push('/')
+	}
+
 	return (
 		<Header height={60} p='xs'>
 			<Box
@@ -27,6 +46,7 @@ export default function MyHeader(props: MyHeaderProps) {
 					display: 'flex',
 					alignItems: 'center',
 					height: '100%',
+					grow: '1',
 				}}
 			>
 				<MediaQuery largerThan='sm' styles={{ display: 'none' }}>
@@ -71,6 +91,8 @@ export default function MyHeader(props: MyHeaderProps) {
 						</MediaQuery>
 					</UnstyledButton>
 				</Link>
+				<Box sx={{ flex: 1 }} />
+				<Button onClick={handleLogout}>Logout</Button>
 			</Box>
 		</Header>
 	)

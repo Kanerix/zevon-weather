@@ -12,9 +12,9 @@ import {
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { IconAlertCircle } from '@tabler/icons'
-import axios from 'axios'
 
 import useUser from '../lib/useUser'
+import axios from 'axios'
 
 const Login: NextPage = () => {
 	const form = useForm({
@@ -26,23 +26,19 @@ const Login: NextPage = () => {
 
 	const { mutateUser } = useUser({
 		redirectTo: '/dashboard/home',
-		redirectIfFound: true,
 	})
 
 	const handleSubmit = (values: typeof form.values) => {
 		mutateUser(async () => {
 			try {
-				const res = await fetch('/api/login', {
-					method: 'POST',
+				const res = await axios.post('/api/login', {
 					headers: {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify(values),
 				})
 
-				if (res.ok) {
-					return await res.json()
-				}
+				return await res.data
 			} catch (error: any) {
 				showNotification({
 					id: 'error',
