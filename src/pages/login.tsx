@@ -1,29 +1,67 @@
-import {
-	Box,
-	Button,
-	Center,
-	Group,
-	Paper,
-	Text,
-	TextInput,
-} from '@mantine/core'
+import { Button, Center, Group, Paper, Text, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { showNotification } from '@mantine/notifications'
+import { IconAlertCircle } from '@tabler/icons'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 
+import { LoginResponse, SignupResponse } from '../@types/api'
+import { useAuth } from '../context/auth'
+
 const Login: NextPage = () => {
+	const auth = useAuth()
+
 	const form = useForm({
 		initialValues: {
-			email: '',
+			username: '',
 			password: '',
-		},
-		validate: {
-			email: (value) =>
-				/^\S+@\S+$/.test(value) ? null : 'Invalid email',
 		},
 	})
 
-	const handleSubmit = (values: typeof form.values) => console.log(values)
+	const handleSubmit = async (values: typeof form.values) => {
+		const res = await fetch('/api/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(values),
+		})
+
+		try {
+			const data = (await res.json()) as unknown as LoginResponse
+
+			if (data.error) {
+				showNotification({
+					id: 'error',
+					autoClose: 5000,
+					title: 'Error:',
+					message: data.error,
+					color: 'red',
+					icon: <IconAlertCircle />,
+				})
+				return
+			}
+
+			if (!data.token) {
+				throw new Error('Auth servers seems to be down')
+			}
+
+			auth.setToken(data.token)
+			return
+		} catch (error) {
+			console.log(error)
+
+			showNotification({
+				id: 'signupError',
+				autoClose: 5000,
+				title: 'Error:',
+				message: 'Auth servers seems to be down',
+				color: 'red',
+				icon: <IconAlertCircle />,
+			})
+			return
+		}
+	}
 
 	return (
 		<Center sx={{ height: '100vh' }}>
@@ -50,10 +88,10 @@ const Login: NextPage = () => {
 					</Text>
 					<TextInput
 						required
-						type='email'
-						label='Email'
-						placeholder='your@email.com'
-						{...form.getInputProps('email')}
+						type='text'
+						label='Username'
+						placeholder='gamername123'
+						{...form.getInputProps('username')}
 					/>
 
 					<TextInput

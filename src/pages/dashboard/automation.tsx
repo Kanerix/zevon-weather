@@ -1,10 +1,13 @@
 import type { GetServerSideProps, NextPage } from 'next'
-import { extractSystemStyles, Grid, Paper, Text } from '@mantine/core'
+import Router from 'next/router'
+import { Grid, Paper, Text } from '@mantine/core'
+import { useEffect } from 'react'
 
 import { Data } from '../../@types/powerData'
 import DashboardLayout from '../../layouts/dashboard'
 import { DashbaordHeader } from '../../components/DashboardHeader'
 import PowerChart from '../../components/PowerChart'
+import { useAuth } from '../../context/auth'
 
 export interface Props {
 	error: null | string

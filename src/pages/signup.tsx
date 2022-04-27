@@ -10,6 +10,7 @@ import { useAuth } from '../context/auth'
 
 const Signup: NextPage = () => {
 	const auth = useAuth()
+
 	const form = useForm({
 		initialValues: {
 			email: '',
@@ -48,12 +49,14 @@ const Signup: NextPage = () => {
 			}
 
 			if (data.token) {
-				auth.setJwt(data.token)
+				auth.setToken(data.token)
 				return
 			}
 
 			throw new Error('Auth servers seems to be down')
-		} catch (e) {
+		} catch (error) {
+			console.log(error)
+
 			showNotification({
 				id: 'signupError',
 				autoClose: 5000,
