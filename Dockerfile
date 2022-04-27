@@ -11,7 +11,10 @@ COPY .yarn ./.yarn
 RUN yarn install --immutable
 
 
-FROM node:16.14.2-alpine3.15 AS builder
+FROM node:16-slim AS builder
+
+RUN apt update
+RUN apt install -y openssl
 
 WORKDIR /build
 
