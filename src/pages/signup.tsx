@@ -1,15 +1,14 @@
+import type { NextPage } from 'next'
+import Link from 'next/link'
 import { Button, Center, Group, Paper, Text, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { IconAlertCircle } from '@tabler/icons'
-import type { NextPage } from 'next'
-import Link from 'next/link'
-import { SignupResponse } from '../@types/api'
 
-import { useAuth } from '../context/auth'
+import { SignupResponse } from '../@types/api'
+import axios from 'axios'
 
 const Signup: NextPage = () => {
-	const auth = useAuth()
 	const form = useForm({
 		initialValues: {
 			email: '',
@@ -32,37 +31,15 @@ const Signup: NextPage = () => {
 			body: JSON.stringify(values),
 		})
 
-		try {
-			const data = (await res.json()) as unknown as SignupResponse
-			console.log(data)
-			if (data.error) {
-				showNotification({
-					id: 'error',
-					autoClose: 5000,
-					title: 'Error:',
-					message: data.error,
-					color: 'red',
-					icon: <IconAlertCircle />,
-				})
-				return
-			}
-
-			if (data.token) {
-				auth.setJwt(data.token)
-				return
-			}
-
-			throw new Error('Auth servers seems to be down')
-		} catch (e) {
+		if (res.ok) {
 			showNotification({
 				id: 'signupError',
 				autoClose: 5000,
 				title: 'Error:',
-				message: 'Auth servers seems to be down',
+				message: res.body,
 				color: 'red',
 				icon: <IconAlertCircle />,
 			})
-			return
 		}
 	}
 
@@ -100,7 +77,7 @@ const Signup: NextPage = () => {
 						required
 						type='text'
 						label='Username'
-						placeholder='gamername420'
+						placeholder='gamertag420'
 						{...form.getInputProps('username')}
 					/>
 					<TextInput

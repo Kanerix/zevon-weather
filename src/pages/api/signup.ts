@@ -2,11 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import prisma from '../../lib/prisma'
 import { SignupResponse } from '../../@types/api'
-import { sign } from 'jsonwebtoken'
 
 export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse<SignupResponse>
+	res: NextApiResponse
 ) {
 	if (req.method !== 'POST') {
 		res.status(400).end('Bad request')
@@ -15,6 +14,8 @@ export default async function handler(
 
 	try {
 		const { username, email, password, confirmPassword } = req.body
+
+		console.log(req.body)
 
 		if (!/^\S+@\S+$/.test(email)) {
 			res.status(400).json({ error: 'Invalid email' })
@@ -26,16 +27,14 @@ export default async function handler(
 			return
 		}
 
-		const user = await prisma.user.create({
+		await prisma.user.create({
 			data: { username: username, email: email, password: password },
 		})
 
-		const jwt = sign(user.username, process.env.JWT_SECRET!)
-
-		res.status(200).json({ token: jwt })
+		res.redirect(307, '/login')
 		return
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 		return
 	}
 }

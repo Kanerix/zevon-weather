@@ -4,7 +4,7 @@ interface Props {
 	header: string
 }
 
-export function DashbaordHeader({ header }: Props) {
+export default function DashbaordHeader({ header }: Props) {
 	return (
 		<Box
 			sx={{

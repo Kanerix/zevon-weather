@@ -1,15 +1,11 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { MantineProvider } from '@mantine/core'
-import { useState } from 'react'
-
-import { GlobalChartStyle } from '../components/GlobalChartStyle'
-import AuthProvider from '../context/auth'
 import { NotificationsProvider } from '@mantine/notifications'
 
-export default function (props: AppProps) {
-	const [open, setOpen] = useState(false)
+import { GlobalChartStyle } from '../components/GlobalChartStyle'
 
+export default function (props: AppProps) {
 	const { Component, pageProps } = props
 
 	return (
@@ -22,20 +18,18 @@ export default function (props: AppProps) {
 				/>
 			</Head>
 			<GlobalChartStyle />
-			<AuthProvider>
-				<MantineProvider
-					withGlobalStyles
-					withNormalizeCSS
-					theme={{
-						colorScheme: 'dark',
-						fontFamily: 'Poppins',
-					}}
-				>
-					<NotificationsProvider>
-						<Component {...pageProps} />
-					</NotificationsProvider>
-				</MantineProvider>
-			</AuthProvider>
+			<MantineProvider
+				withGlobalStyles
+				withNormalizeCSS
+				theme={{
+					colorScheme: 'dark',
+					fontFamily: 'Poppins',
+				}}
+			>
+				<NotificationsProvider>
+					<Component {...pageProps} />
+				</NotificationsProvider>
+			</MantineProvider>
 		</>
 	)
 }

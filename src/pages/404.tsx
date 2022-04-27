@@ -4,7 +4,6 @@ export default function Custom404() {
 	return (
 		<Box
 			sx={{
-				height: '100vh',
 				width: '100%',
 			}}
 		>
@@ -13,6 +12,7 @@ export default function Custom404() {
 					display: 'flex',
 					justifyContent: 'center',
 					alignItems: 'center',
+					height: '100vh',
 				}}
 			>
 				<Text

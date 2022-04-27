@@ -1,123 +1,81 @@
-import type { GetStaticProps, NextPage } from 'next'
-import { Box, Grid, DefaultMantineColor, Paper, Text } from '@mantine/core'
+import type { GetServerSideProps, NextPage } from 'next'
+import { Grid, Paper, Text, Skeleton } from '@mantine/core'
+import useSWR from 'swr'
+import axios from 'axios'
+import { withIronSessionSsr } from 'iron-session/next'
 
-import PowerChart from '../../components/PowerChart'
+import type { NordpoolData } from '../../@types/nordpoolApi'
 import DashboardLayout from '../../layouts/dashboard'
-import { Data } from '../../@types/powerData'
-import { DashbaordHeader } from '../../components/DashboardHeader'
+import DashbaordHeader from '../../components/DashboardHeader'
+import PowerChart from '../../components/PowerChart'
+import PriceColumn from '../../components/PriceColumn'
+import formatMonthlyData from '../../lib/formatMonthlyData'
+import { withSessionSsr } from '../../lib/withSession'
+import { User } from '../../@types/user'
 
-interface Props {
-	error: null | string
-	chartData: {
-		eastDenmark: number[]
-		westDenmark: number[]
-	}
-	chartSeries: string[]
-}
+export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
+	const user = req.session.user
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
-	const data = await fetch(
-		'https://www.nordpoolgroup.com/api/marketdata/page/11?currency=,,DKK,DKK'
-	)
+	if (user === undefined) {
+		res.setHeader('location', '/login')
+		res.statusCode = 302
+		res.end()
 
-	const json = (await data.json()) as Data
-
-	let eastDenmark = []
-	let westDenmark = []
-	let chartSeries = []
-	let error = ''
-
-	try {
-		for (let row of json.data.Rows) {
-			chartSeries.unshift(row.Name)
-
-			for (let column of row.Columns.filter((column) =>
-				column.Name.startsWith('DK')
-			)) {
-				if (column.Name == 'DK1') {
-					eastDenmark.unshift(
-						parseInt(column.Value.replaceAll(' ', ''))
-					)
-				} else {
-					westDenmark.unshift(
-						parseInt(column.Value.replaceAll(' ', ''))
-					)
-				}
-			}
+		return {
+			props: {
+				user: { username: '', email: '', isLoggedIn: false } as User,
+			},
 		}
-	} catch (e) {
-		error = 'Failed to fetch data!'
 	}
 
 	return {
-		props: {
-			error: error || null,
-			chartData: {
-				westDenmark: eastDenmark,
-				eastDenmark: westDenmark,
-			},
-			chartSeries: chartSeries,
-		},
+		props: { user: req.session.user },
 	}
-}
+})
 
-const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
-	const PriceColumn = ({
-		color,
-		header,
-		footer,
-		price,
-	}: {
-		color: DefaultMantineColor
-		header: string
-		footer: string
-		price: number
-	}) => (
-		<Paper p='md'>
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-				}}
-			>
-				<Text
-					color={color}
-					sx={{
-						paddingRight: '16px',
-						marginRight: '16px',
-						fontSize: '34px',
-						fontWeight: '500',
-						borderRight: '2px solid #9f9f9f',
-					}}
-				>
-					{price}
-				</Text>
-				<Box>
-					<Text>{header}</Text>
-					<Text size='xl'>{price} DKK/MWh</Text>
-					<Text>{footer}</Text>
-				</Box>
-			</Box>
-		</Paper>
-	)
+const Home: NextPage = () => {
+	const { data, error } = useSWR('/api/nordpool/predictions', async (url) => {
+		const res = await axios.get(url)
+		const json = res.data as NordpoolData
 
-	const AveragePrice = (array: number[]): number =>
-		Math.round(array.reduce((a, b) => a + b, 0) / array.length)
+		return formatMonthlyData(json)
+	})
 
-	const AveragePriceWest = AveragePrice(chartData.westDenmark)
-	const AveragePriceEast = AveragePrice(chartData.eastDenmark)
+	const PageContent = () => {
+		if (!data) {
+			return (
+				<>
+					<Grid.Col md={12} lg={6} xl={4.5}>
+						<Skeleton height={123} />
+					</Grid.Col>
+					<Grid.Col md={12} lg={6} xl={4.5}>
+						<Skeleton height={123} />
+					</Grid.Col>
+					<Grid.Col md={12} lg={6} xl={4.5}>
+						<Skeleton height={123} />
+					</Grid.Col>
+					<Grid.Col md={12} lg={6} xl={4.5}>
+						<Skeleton height={123} />
+					</Grid.Col>
 
-	const CurrentPriceWest =
-		chartData.westDenmark[chartData.westDenmark.length - 1]
-	const CurrentPriceEast =
-		chartData.eastDenmark[chartData.eastDenmark.length - 1]
+					<Grid.Col xl={9}>
+						<Skeleton height={836} />
+					</Grid.Col>
+				</>
+			)
+		}
 
-	return (
-		<DashboardLayout>
-			<Grid justify='center'>
-				<Grid.Col xl={9}>
-					<DashbaordHeader header='Dashboard' />
-				</Grid.Col>
+		const AveragePrice = (array: number[]): number =>
+			Math.round(array.reduce((a, b) => a + b, 0) / array.length)
+
+		const AveragePriceWest = AveragePrice(data.westDenmark)
+		const AveragePriceEast = AveragePrice(data.eastDenmark)
+
+		const CurrentPriceWest = data.westDenmark[data.westDenmark.length - 1]
+		const CurrentPriceEast = data.eastDenmark[data.eastDenmark.length - 1]
+
+		return (
+			<>
 				<Grid.Col md={12} lg={6} xl={4.5}>
 					<PriceColumn
 						color={
@@ -126,7 +84,7 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 								: 'green'
 						}
 						header='AVERAGE PRICE WEST'
-						footer={`LAST ${chartSeries.length} DAYS`}
+						footer={`LAST ${data.chartSeries.length} DAYS`}
 						price={AveragePriceWest}
 					/>
 				</Grid.Col>
@@ -138,7 +96,7 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 								: 'green'
 						}
 						header='AVERAGE PRICE EAST'
-						footer={`LAST ${chartSeries.length} DAYS`}
+						footer={`LAST ${data.chartSeries.length} DAYS`}
 						price={AveragePriceEast}
 					/>
 				</Grid.Col>
@@ -186,11 +144,31 @@ const Home: NextPage<Props> = ({ chartData, chartSeries }) => {
 							Power prices (DKK/MWh)
 						</Text>
 						<PowerChart
-							chartData={chartData}
-							chartSeries={chartSeries}
+							chartData={{
+								westDenmark: data.westDenmark,
+								eastDenmark: data.eastDenmark,
+							}}
+							chartSeries={data.chartSeries}
 						/>
 					</Paper>
 				</Grid.Col>
+			</>
+		)
+
+		return null
+	}
+
+	return (
+		<DashboardLayout>
+			<Grid justify='center'>
+				<Grid.Col xl={9}>
+					<DashbaordHeader header='Dashboard' />
+				</Grid.Col>
+				{(() => {
+					if (PageContent) {
+						return <PageContent />
+					}
+				})()}
 			</Grid>
 		</DashboardLayout>
 	)

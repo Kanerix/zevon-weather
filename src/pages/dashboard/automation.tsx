@@ -1,82 +1,90 @@
-import type { GetServerSideProps, NextPage } from 'next'
-import { extractSystemStyles, Grid, Paper, Text } from '@mantine/core'
+import type { NextPage } from 'next'
+import { Grid, Paper, Skeleton, Text } from '@mantine/core'
+import axios from 'axios'
+import useSWR from 'swr'
 
-import { Data } from '../../@types/powerData'
 import DashboardLayout from '../../layouts/dashboard'
-import { DashbaordHeader } from '../../components/DashboardHeader'
+import DashbaordHeader from '../../components/DashboardHeader'
 import PowerChart from '../../components/PowerChart'
+import formatPredictionData from '../../lib/formatPredictionData'
+import { withSessionSsr } from '../../lib/withSession'
+import { NordpoolData } from '../../@types/nordpoolApi'
+import { User } from '../../@types/user'
 
-export interface Props {
-	error: null | string
-	chartData: {
-		eastDenmark: number[]
-		westDenmark: number[]
-	}
-	chartSeries: string[]
-}
+export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
+	const user = req.session.user
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-	context
-) => {
-	const data = await fetch(
-		'https://www.nordpoolgroup.com/api/marketdata/page/10?currency=,,DKK,DKK'
-	)
+	if (user === undefined) {
+		res.setHeader('location', '/login')
+		res.statusCode = 302
+		res.end()
 
-	const json = (await data.json()) as Data
-
-	let eastDenmark = []
-	let westDenmark = []
-	let chartSeries = []
-	let error = ''
-
-	try {
-		for (let row of json.data.Rows) {
-			if (
-				[
-					'Min',
-					'Max',
-					'Average',
-					'Peak',
-					'Off-peak 1',
-					'Off-peak 2',
-				].includes(row.Name)
-			) {
-				continue
-			}
-
-			chartSeries.unshift('Kl. ' + row.Name.replaceAll('&nbsp;', ' '))
-
-			for (let column of row.Columns.filter((column) =>
-				column.Name.startsWith('DK')
-			)) {
-				if (column.Name == 'DK1') {
-					eastDenmark.unshift(
-						parseInt(column.Value.replaceAll(' ', ''))
-					)
-				} else {
-					westDenmark.unshift(
-						parseInt(column.Value.replaceAll(' ', ''))
-					)
-				}
-			}
+		return {
+			props: {
+				user: { username: '', email: '', isLoggedIn: false } as User,
+			},
 		}
-	} catch (e) {
-		error = 'Failed to fetch data!'
 	}
 
 	return {
-		props: {
-			error: error || null,
-			chartData: {
-				westDenmark: eastDenmark,
-				eastDenmark: westDenmark,
-			},
-			chartSeries: chartSeries,
-		},
+		props: { user: req.session.user },
 	}
-}
+})
 
-const Automation: NextPage<Props> = ({ chartData, chartSeries }) => {
+const Automation: NextPage = () => {
+	const { data, error } = useSWR('predictionData', async () => {
+		const res = await axios.get('/api/nordpool/predictions')
+		const json = res.data as NordpoolData
+
+		return formatPredictionData(json)
+	})
+
+	const Chart = () => (
+		<>
+			<Text
+				sx={{
+					fontSize: '28px',
+					fontWeight: '500',
+					marginBottom: '12px',
+				}}
+			>
+				Power price predictions for
+				{' ' +
+					(() => {
+						const today = new Date()
+
+						let tomorrow = new Date()
+						tomorrow.setDate(today.getDate() + 1)
+
+						return tomorrow.toDateString()
+					})()}
+			</Text>
+			<Text
+				size='xl'
+				sx={{
+					marginBottom: '12px',
+				}}
+			>
+				Power prices (DKK/MWh)
+			</Text>
+			{(() => {
+				if (!data) {
+					return <Skeleton height={836} />
+				}
+
+				return (
+					<PowerChart
+						chartData={{
+							eastDenmark: data.eastDenmark,
+							westDenmark: data.westDenmark,
+						}}
+						chartSeries={data.chartSeries}
+					/>
+				)
+			})()}
+		</>
+	)
+
 	return (
 		<DashboardLayout>
 			<Grid justify='center'>
@@ -85,36 +93,7 @@ const Automation: NextPage<Props> = ({ chartData, chartSeries }) => {
 				</Grid.Col>
 				<Grid.Col xl={9}>
 					<Paper p='xl'>
-						<Text
-							sx={{
-								fontSize: '28px',
-								fontWeight: '500',
-								marginBottom: '12px',
-							}}
-						>
-							Power price predictions for
-							{' ' +
-								(() => {
-									const today = new Date()
-
-									let tomorrow = new Date()
-									tomorrow.setDate(today.getDate() + 1)
-
-									return tomorrow.toDateString()
-								})()}
-						</Text>
-						<Text
-							size='xl'
-							sx={{
-								marginBottom: '12px',
-							}}
-						>
-							Power prices (DKK/MWh)
-						</Text>
-						<PowerChart
-							chartData={chartData}
-							chartSeries={chartSeries}
-						/>
+						<Chart />
 					</Paper>
 				</Grid.Col>
 			</Grid>

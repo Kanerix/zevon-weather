@@ -1,8 +1,30 @@
 import { Grid, Paper } from '@mantine/core'
 import type { NextPage } from 'next'
 
-import { DashbaordHeader } from '../../components/DashboardHeader'
+import DashbaordHeader from '../../components/DashboardHeader'
 import DashboardLayout from '../../layouts/dashboard'
+import { withSessionSsr } from '../../lib/withSession'
+import { User } from '../../@types/user'
+
+export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
+	const user = req.session.user
+
+	if (user === undefined) {
+		res.setHeader('location', '/login')
+		res.statusCode = 302
+		res.end()
+
+		return {
+			props: {
+				user: { username: '', email: '', isLoggedIn: false } as User,
+			},
+		}
+	}
+
+	return {
+		props: { user: req.session.user },
+	}
+})
 
 const Docs: NextPage = () => {
 	return (
