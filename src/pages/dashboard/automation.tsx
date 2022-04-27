@@ -1,26 +1,15 @@
-<<<<<<< HEAD
 import type { NextPage } from 'next'
 import { Grid, Paper, Skeleton, Text } from '@mantine/core'
 import axios from 'axios'
 import useSWR from 'swr'
-=======
-import type { GetServerSideProps, NextPage } from 'next'
-import Router from 'next/router'
-import { Grid, Paper, Text } from '@mantine/core'
-import { useEffect } from 'react'
->>>>>>> main
 
 import DashboardLayout from '../../layouts/dashboard'
 import DashbaordHeader from '../../components/DashboardHeader'
 import PowerChart from '../../components/PowerChart'
-<<<<<<< HEAD
 import formatPredictionData from '../../lib/formatPredictionData'
 import { withSessionSsr } from '../../lib/withSession'
 import { NordpoolData } from '../../@types/nordpoolApi'
 import { User } from '../../@types/user'
-=======
-import { useAuth } from '../../context/auth'
->>>>>>> main
 
 export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
 	const user = req.session.user
