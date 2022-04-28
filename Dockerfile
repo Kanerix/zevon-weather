@@ -1,6 +1,4 @@
-FROM node:16.14.2-alpine3.15 AS deps
-
-RUN apk add --no-cache libc6-compat
+FROM node:16-slim AS deps
 
 WORKDIR /deps
 
@@ -27,7 +25,7 @@ RUN yarn prisma generate
 RUN yarn build
 
 
-FROM node:16.14.2-alpine3.15 AS runner
+FROM node:16-slim AS runner
 
 WORKDIR /app
 
@@ -39,7 +37,6 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /build/next.config.js ./
 COPY --from=builder /build/src/public ./public
 COPY --from=builder /build/package.json ./
-COPY --from=builder /build/.env ./
 
 COPY --from=builder --chown=nextjs:nodejs /build/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /build/.next/static ./.next/static
