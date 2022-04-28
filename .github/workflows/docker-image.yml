@@ -15,6 +15,7 @@ jobs:
             - name: Make envfile
               uses: SpicyPizza/create-envfile@v1.3
               with:
+                  envkey_NODE_ENV: production
                   envkey_TOKEN_PASSWORD: ${{ secrets.TOKEN_PASSWORD }}
                   envkey_DATABASE_URL: ${{ secrets.DATABASE_URL }}
                   file_name: .env
