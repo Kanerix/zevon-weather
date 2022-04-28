@@ -4,15 +4,11 @@ You can find the webpage at [weather.zevon.dk](http://www.weather.zevon.dk/).
 
 **All kubernetes is done with [k3s](https://k3s.io/).**
 
-This github workflow automatic build amd64 and arm64 images and pushes them to [DockerHub](https://hub.docker.com/).
-
-<br/>
+The github workflow automatic builds amd64 and arm64 images and pushes them to [DockerHub](https://hub.docker.com/).
 
 # Purpose
 
-The app is supposed to calculate and tell you the current price of energy in Denmark, since the price is cheaper when the energy is greener.
-
-<br/>
+The app is supposed to calculate and tell you the current price of energy in Denmark and then automate command task the require energy. This is done because the price is cheaper when the energy is greener.
 
 # Getting started
 
@@ -26,6 +22,10 @@ You do so by following the instructions below:
 
 2.  Run the command `yarn` (Same as `npm install`).
 
-3.  Run `yarn dev` (Same as `npm run dev`).
+3.  Fill out a `.env` file following the `.env.example` file.
 
-4.  Go to [localhost:3000](https://localhost:3000/).
+4.  Run `prisma generate` to generate prisma client.
+
+5.  Run `yarn dev` (Same as `npm run dev`).
+
+6.  Go to [localhost:3000](https://localhost:3000/).
