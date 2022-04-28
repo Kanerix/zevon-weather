@@ -15,9 +15,9 @@ import RequestEventComponent from '../../components/RequestEvent'
 import formatPredictionData from '../../lib/formatPredictionData'
 import prisma from '../../lib/prisma'
 import { withSessionSsr } from '../../lib/withSession'
-import { NordpoolData } from '../../@types/nordpoolAPI'
-import { User } from '../../@types/user'
-import { RequestEvent } from '../../@types/event'
+import { NordpoolData } from '../../types/nordpoolAPI'
+import { User } from '../../types/user'
+import { RequestEvent } from '../../types/event'
 
 interface Props {
 	events: RequestEvent[]
