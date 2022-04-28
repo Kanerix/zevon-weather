@@ -12,16 +12,15 @@ async function createEventRoute(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	try {
-		console.log
-		const id = req.body
-
-		if (typeof id !== 'string') {
-			res.status(400).json({ error: 'Invalid input' })
+		if (!req.session.user || !req.session.user.isLoggedIn) {
+			res.status(401).json({ error: 'Not authorized' })
 			return
 		}
 
-		if (!req.session.user) {
-			res.status(401).json({ error: 'Not authorized' })
+		const id = req.body.id
+
+		if (typeof id !== 'string') {
+			res.status(400).json({ error: 'Invalid input' })
 			return
 		}
 

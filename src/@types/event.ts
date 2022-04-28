@@ -1,4 +1,4 @@
-export interface RequestEvent {
+export interface EndpointEvent {
 	id: string
 	title: string
 	timeToExecute: string

@@ -36,7 +36,7 @@ export default function MyNavbar(props: MyNavbarProps) {
 		},
 		{
 			path: '/dashboard/documentation',
-			label: 'Docs',
+			label: 'Documentation',
 			color: 'violet',
 			icon: <IconApi />,
 		},
@@ -53,7 +53,7 @@ export default function MyNavbar(props: MyNavbarProps) {
 			p='xs'
 			hiddenBreakpoint='sm'
 			hidden={!props.open}
-			width={{ sm: 200, md: 250 }}
+			width={{ sm: 210, md: 250 }}
 		>
 			<Navbar.Section mt='xs'>
 				{pages.map((item, index) => {

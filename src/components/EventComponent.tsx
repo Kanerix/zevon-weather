@@ -4,23 +4,34 @@ import { showNotification } from '@mantine/notifications'
 import { IconAlertCircle } from '@tabler/icons'
 import axios from 'axios'
 
-import { RequestEvent } from '../@types/event'
+import { EndpointEvent } from '../@types/event'
 
 interface Props {
-	event: RequestEvent
+	event: EndpointEvent
 }
 
 export default function RequestEventComponent({ event }: Props) {
-	const date = new Date(event.timeToExecute)
+	const date = new Date(event.timeToExecute).toLocaleDateString('en-GB', {
+		timeZone: 'Europe/Copenhagen',
+		hour: 'numeric',
+		minute: 'numeric',
+	})
 
 	const router = useRouter()
 
 	const handleTest = async () => {
 		try {
-			await axios.get(event.endpoint)
+			console.log(event.endpoint)
+
+			await axios.post('/api/event/test', {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				data: { endpoint: event.endpoint },
+			})
 
 			showNotification({
-				id: 'error',
+				id: 'success',
 				autoClose: 5000,
 				title: 'Success:',
 				message: 'The request was successful',
@@ -32,7 +43,7 @@ export default function RequestEventComponent({ event }: Props) {
 				id: 'error',
 				autoClose: 5000,
 				title: 'Error:',
-				message: error?.response?.data.error,
+				message: error?.message,
 				color: 'red',
 				icon: <IconAlertCircle />,
 			})
@@ -45,7 +56,7 @@ export default function RequestEventComponent({ event }: Props) {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				data: event.id,
+				data: { id: event.id },
 			})
 
 			router.reload()
@@ -70,6 +81,7 @@ export default function RequestEventComponent({ event }: Props) {
 		>
 			<Box
 				sx={{
+					height: '100%',
 					display: 'flex',
 					justifyContent: 'space-between',
 					alignItems: 'center',
@@ -77,10 +89,15 @@ export default function RequestEventComponent({ event }: Props) {
 			>
 				<Text>{event.title}</Text>
 				<Code>{event.endpoint}</Code>
-				<Text>{'Kl ' + date.getHours() + '.' + date.getMinutes()}</Text>
-				<Button variant='default' onClick={handleDelete}>
-					Delete
-				</Button>
+				<Text>{date}</Text>
+				<Box>
+					<Button variant='default' onClick={handleTest} mr='xs'>
+						Test
+					</Button>
+					<Button variant='default' onClick={handleDelete}>
+						Delete
+					</Button>
+				</Box>
 			</Box>
 		</Paper>
 	)

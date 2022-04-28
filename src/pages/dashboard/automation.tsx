@@ -1,6 +1,14 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { Button, Grid, Paper, Skeleton, Text, TextInput } from '@mantine/core'
+import {
+	Button,
+	Grid,
+	Group,
+	Paper,
+	Skeleton,
+	Text,
+	TextInput,
+} from '@mantine/core'
 import { useForm } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { TimeInput } from '@mantine/dates'
@@ -10,17 +18,18 @@ import useSWR from 'swr'
 
 import DashboardLayout from '../../layouts/dashboard'
 import DashbaordHeader from '../../components/DashboardHeader'
+import CreateEventForm from '../../components/CreateEventForm'
 import PowerChart from '../../components/PowerChart'
-import RequestEventComponent from '../../components/RequestEvent'
+import RequestEventComponent from '../../components/EventComponent'
 import formatPredictionData from '../../lib/formatPredictionData'
 import prisma from '../../lib/prisma'
 import { withSessionSsr } from '../../lib/withSession'
 import { NordpoolData } from '../../@types/nordpoolAPI'
 import { User } from '../../@types/user'
-import { RequestEvent } from '../../@types/event'
+import { EndpointEvent } from '../../@types/event'
 
 interface Props {
-	events: RequestEvent[]
+	events: EndpointEvent[]
 }
 
 export const getServerSideProps = withSessionSsr<any>(async ({ req, res }) => {
@@ -42,7 +51,7 @@ export const getServerSideProps = withSessionSsr<any>(async ({ req, res }) => {
 		where: { user: { username: user.username } },
 	})
 
-	const events: RequestEvent[] = []
+	const events: EndpointEvent[] = []
 
 	for (let event of prismaEvents) {
 		events.push({
@@ -82,36 +91,6 @@ const Automation: NextPage<Props> = ({ events }) => {
 		})
 	}
 
-	const form = useForm({
-		initialValues: {
-			title: '',
-			timeToExecute: new Date(),
-			endpoint: '',
-		},
-	})
-
-	const handleSubmit = async (values: typeof form.values) => {
-		try {
-			await axios.post('/api/event/create', {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				values,
-			})
-
-			router.reload()
-		} catch (error: any) {
-			showNotification({
-				id: 'error',
-				autoClose: 5000,
-				title: 'Error:',
-				message: error?.response?.data.error,
-				color: 'red',
-				icon: <IconAlertCircle />,
-			})
-		}
-	}
-
 	const Chart = () => (
 		<>
 			<Text
@@ -124,20 +103,18 @@ const Automation: NextPage<Props> = ({ events }) => {
 				Power price predictions for
 				{' ' +
 					(() => {
-						const today = new Date()
-
 						let tomorrow = new Date()
-						tomorrow.setDate(today.getDate() + 1)
+						tomorrow.setDate(new Date().getDate() + 1)
 
-						return tomorrow.toDateString()
+						return tomorrow.toLocaleDateString('en-GB', {
+							month: 'long',
+							weekday: 'long',
+							day: 'numeric',
+							year: 'numeric',
+						})
 					})()}
 			</Text>
-			<Text
-				size='xl'
-				sx={{
-					marginBottom: '12px',
-				}}
-			>
+			<Text mb='md' size='xl'>
 				Power prices (DKK/MWh)
 			</Text>
 			{(() => {
@@ -165,39 +142,13 @@ const Automation: NextPage<Props> = ({ events }) => {
 					<DashbaordHeader header='Automation' />
 				</Grid.Col>
 				<Grid.Col xl={9}>
-					<Paper p='xl'>
+					<Paper p='md'>
 						<Chart />
 					</Paper>
 				</Grid.Col>
 				<Grid.Col xl={9}>
 					<Paper p='md'>
-						<form onSubmit={form.onSubmit(handleSubmit)}>
-							<TextInput
-								mb='md'
-								required
-								label='Title'
-								placeholder='Turn on washer'
-								{...form.getInputProps('title')}
-							/>
-							<TextInput
-								mb='md'
-								required
-								label='Endpoint'
-								placeholder='http://example.com/api/enable'
-								{...form.getInputProps('endpoint')}
-							/>
-							<TimeInput
-								mb='md'
-								required
-								label='Pick time'
-								icon={<IconClock size={16} />}
-								defaultValue={new Date()}
-								{...form.getInputProps('timeToExecute')}
-							/>
-							<Button fullWidth type='submit' mt='md'>
-								Create
-							</Button>
-						</form>
+						<CreateEventForm />
 					</Paper>
 				</Grid.Col>
 				{events.map((event, index) => (
