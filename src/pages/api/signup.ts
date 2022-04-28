@@ -50,8 +50,9 @@ async function signinRoute(req: NextApiRequest, res: NextApiResponse) {
 		})
 
 		req.session.user = {
-			isLoggedIn: true,
+			id: user.id,
 			username: user.username,
+			isLoggedIn: true,
 		}
 
 		await req.session.save()

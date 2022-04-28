@@ -532,24 +532,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:^4.1.5":
-  version: 4.1.5
-  resolution: "@mantine/core@npm:4.1.5"
+"@mantine/core@npm:4.2.0":
+  version: 4.2.0
+  resolution: "@mantine/core@npm:4.2.0"
   dependencies:
-    "@mantine/styles": 4.1.5
+    "@mantine/styles": 4.2.0
     "@popperjs/core": ^2.9.3
     "@radix-ui/react-scroll-area": ^0.1.1
     react-popper: ^2.2.5
     react-textarea-autosize: ^8.3.2
   peerDependencies:
-    "@mantine/hooks": 4.1.5
+    "@mantine/hooks": 4.2.0
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 4a4f2e0d0b597614357c854e2a5dff8d68da26b1850baff2d9b50a4d641097722c9556991503bed9a62e26783fbebc855f41bb4db236f7631c7dd8a19d2e82ca
+  checksum: ee7e292253dded5b937f86098b93aff3596aa898040dc6e006cbc6b8ffb9cebf40fe10576bf285f76b2aab95b96264438d8e5bf73bfb97c73e5eb1075720fbde
   languageName: node
   linkType: hard
 
-"@mantine/form@npm:^4.1.5":
+"@mantine/form@npm:4.1.5":
   version: 4.1.5
   resolution: "@mantine/form@npm:4.1.5"
   peerDependencies:
@@ -558,7 +558,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:^4.1.5":
+"@mantine/hooks@npm:4.1.5":
   version: 4.1.5
   resolution: "@mantine/hooks@npm:4.1.5"
   peerDependencies:
@@ -630,9 +630,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/styles@npm:4.1.5":
-  version: 4.1.5
-  resolution: "@mantine/styles@npm:4.1.5"
+"@mantine/styles@npm:4.2.0":
+  version: 4.2.0
+  resolution: "@mantine/styles@npm:4.2.0"
   dependencies:
     "@emotion/cache": ^11.7.1
     "@emotion/react": ^11.7.1
@@ -643,7 +643,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 0abb2540815d379c6f6e03d02960744395c4e6a403539191b03ae7b461fdcd85f69f5e9a4e33a50e346d56d1dfdb00f5ddd2d2c5cbd4a25dea4a813e0227f703
+  checksum: bb9b17c15db5febfd3133182c3e7ab6c64ff0525badad26c50c94ae67067071f88d3f6ac7fbe537ee392ed191743a9f5cfb54ff20124447ba24505c179d07b5f
   languageName: node
   linkType: hard
 
@@ -4144,9 +4144,9 @@ __metadata:
   resolution: "zevon-weather@workspace:."
   dependencies:
     "@babel/core": ^7.17.8
-    "@mantine/core": ^4.1.5
-    "@mantine/form": ^4.1.5
-    "@mantine/hooks": ^4.1.5
+    "@mantine/core": 4.2.0
+    "@mantine/form": 4.1.5
+    "@mantine/hooks": 4.1.5
     "@mantine/next": ^4.0.7
     "@mantine/notifications": ^4.1.5
     "@prisma/client": 3.13.0

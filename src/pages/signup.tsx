@@ -42,7 +42,7 @@ const Signup: NextPage = () => {
 					id: 'error',
 					autoClose: 5000,
 					title: 'Error:',
-					message: error.message,
+					message: error?.response?.data.error,
 					color: 'red',
 					icon: <IconAlertCircle />,
 				})

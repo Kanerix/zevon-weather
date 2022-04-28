@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import { MantineProvider } from '@mantine/core'
+import { MantineProvider, useMantineTheme } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 
 import { GlobalChartStyle } from '../components/GlobalChartStyle'
@@ -24,6 +24,7 @@ export default function (props: AppProps) {
 				theme={{
 					colorScheme: 'dark',
 					fontFamily: 'Poppins',
+					primaryShade: 6,
 				}}
 			>
 				<NotificationsProvider>

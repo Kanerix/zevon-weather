@@ -16,7 +16,7 @@ export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
 
 		return {
 			props: {
-				user: { username: '', email: '', isLoggedIn: false } as User,
+				user: { id: '', username: '', isLoggedIn: false } as User,
 			},
 		}
 	}

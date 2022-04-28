@@ -1,16 +1,17 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import { Grid, Paper, Text, Skeleton } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
+import { IconAlertCircle } from '@tabler/icons'
 import useSWR from 'swr'
 import axios from 'axios'
-import { withIronSessionSsr } from 'iron-session/next'
 
-import type { NordpoolData } from '../../@types/nordpoolApi'
 import DashboardLayout from '../../layouts/dashboard'
 import DashbaordHeader from '../../components/DashboardHeader'
 import PowerChart from '../../components/PowerChart'
 import PriceColumn from '../../components/PriceColumn'
 import formatMonthlyData from '../../lib/formatMonthlyData'
 import { withSessionSsr } from '../../lib/withSession'
+import type { NordpoolData } from '../../@types/nordpoolApi'
 import { User } from '../../@types/user'
 
 export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
@@ -23,7 +24,7 @@ export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
 
 		return {
 			props: {
-				user: { username: '', email: '', isLoggedIn: false } as User,
+				user: { id: '', username: '', isLoggedIn: false } as User,
 			},
 		}
 	}
@@ -40,6 +41,17 @@ const Home: NextPage = () => {
 
 		return formatMonthlyData(json)
 	})
+
+	if (error) {
+		showNotification({
+			id: 'error',
+			autoClose: 5000,
+			title: 'Error:',
+			message: error.message,
+			color: 'red',
+			icon: <IconAlertCircle />,
+		})
+	}
 
 	const PageContent = () => {
 		if (!data) {

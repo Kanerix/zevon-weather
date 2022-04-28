@@ -40,11 +40,12 @@ const Login: NextPage = () => {
 
 				return await res.data
 			} catch (error: any) {
+				console.log(error)
 				showNotification({
 					id: 'error',
 					autoClose: 5000,
 					title: 'Error:',
-					message: error.message,
+					message: error?.response?.data.error,
 					color: 'red',
 					icon: <IconAlertCircle />,
 				})

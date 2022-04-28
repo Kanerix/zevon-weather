@@ -92,7 +92,9 @@ export default function MyHeader(props: MyHeaderProps) {
 					</UnstyledButton>
 				</Link>
 				<Box sx={{ flex: 1 }} />
-				<Button onClick={handleLogout}>Logout</Button>
+				<Button variant='default' onClick={handleLogout}>
+					Logout
+				</Button>
 			</Box>
 		</Header>
 	)
