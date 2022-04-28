@@ -24,7 +24,6 @@ export default function (props: AppProps) {
 				theme={{
 					colorScheme: 'dark',
 					fontFamily: 'Poppins',
-					primaryShade: 6,
 				}}
 			>
 				<NotificationsProvider>

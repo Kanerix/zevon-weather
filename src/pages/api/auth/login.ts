@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import prisma from '../../lib/prisma'
-import { withSessionRoute } from '../../lib/withSession'
+import prisma from '../../../lib/prisma'
+import { withSessionRoute } from '../../../lib/withSession'
 
 export default withSessionRoute(loginRoute)
 
@@ -12,10 +12,9 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	try {
-		const { username, password } = JSON.parse(req.body.body)
+		const { username, password } = req.body.values
 
 		if (typeof username !== 'string' || typeof password !== 'string') {
-			console.log(typeof username, ' ', typeof password)
 			res.status(400).json({ error: 'Invalid username or password' })
 			return
 		}

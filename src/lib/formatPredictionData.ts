@@ -1,4 +1,4 @@
-import { NordpoolData } from '../@types/nordpoolApi'
+import { NordpoolData } from '../@types/nordpoolAPI'
 
 interface PowerChartData {
 	eastDenmark: number[]

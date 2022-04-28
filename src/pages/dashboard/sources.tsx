@@ -6,7 +6,7 @@ import DashbaordHeader from '../../components/DashboardHeader'
 import { withSessionSsr } from '../../lib/withSession'
 import { User } from '../../@types/user'
 
-export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
+export const getServerSideProps = withSessionSsr(async ({ req, res }) => {
 	const user = req.session.user
 
 	if (user === undefined) {

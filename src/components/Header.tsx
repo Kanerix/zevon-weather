@@ -31,7 +31,7 @@ export default function MyHeader(props: MyHeaderProps) {
 
 	const handleLogout = () => {
 		mutateUser(async () => {
-			const res = await axios.post('/api/logout')
+			const res = await axios.post('/api/auth/logout')
 
 			return await res.data
 		}, false)

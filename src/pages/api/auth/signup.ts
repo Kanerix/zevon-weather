@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import prisma from '../../lib/prisma'
-import { withSessionRoute } from '../../lib/withSession'
+import prisma from '../../../lib/prisma'
+import { withSessionRoute } from '../../../lib/withSession'
 
 export default withSessionRoute(signinRoute)
 
@@ -12,9 +12,7 @@ async function signinRoute(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	try {
-		const { username, email, password, confirmPassword } = JSON.parse(
-			req.body.body
-		)
+		const { username, email, password, confirmPassword } = req.body.values
 
 		if (
 			typeof username !== 'string' ||

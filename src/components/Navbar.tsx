@@ -1,10 +1,11 @@
-import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import {
 	DefaultMantineColor,
 	Group,
 	Navbar,
+	Paper,
 	Text,
 	ThemeIcon,
 	UnstyledButton,
@@ -16,6 +17,7 @@ import {
 	IconAlarm,
 	TablerIconProps,
 } from '@tabler/icons'
+import useUser from '../lib/useUser'
 
 interface Page {
 	path: string
@@ -31,6 +33,8 @@ interface MyNavbarProps {
 
 export default function MyNavbar(props: MyNavbarProps) {
 	const router = useRouter()
+
+	const { user } = useUser()
 
 	const pages: Page[] = [
 		{
@@ -67,6 +71,9 @@ export default function MyNavbar(props: MyNavbarProps) {
 			width={{ sm: 200, md: 250 }}
 		>
 			<Navbar.Section mt='xs'>
+				<Navbar.Section>
+					<Paper>{user?.username}</Paper>
+				</Navbar.Section>
 				{pages.map((item, index) => {
 					const selected = router.asPath === item.path
 

@@ -31,16 +31,15 @@ const Login: NextPage = () => {
 	const handleSubmit = (values: typeof form.values) => {
 		mutateUser(async () => {
 			try {
-				const res = await axios.post('/api/login', {
+				const res = await axios.post('/api/auth/login', {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify(values),
+					values,
 				})
 
 				return await res.data
 			} catch (error: any) {
-				console.log(error)
 				showNotification({
 					id: 'error',
 					autoClose: 5000,
@@ -61,9 +60,6 @@ const Login: NextPage = () => {
 				sx={{
 					maxWidth: 500,
 					width: '100%',
-					'& form .mantine-TextInput-root': {
-						marginBottom: '36px',
-					},
 				}}
 			>
 				<form onSubmit={form.onSubmit(handleSubmit)}>
@@ -77,6 +73,7 @@ const Login: NextPage = () => {
 						Login
 					</Text>
 					<TextInput
+						mb='md'
 						required
 						type='text'
 						label='Username'
@@ -85,14 +82,15 @@ const Login: NextPage = () => {
 					/>
 
 					<TextInput
+						mb='md'
 						required
 						type='password'
 						label='Password'
 						placeholder='********'
 						{...form.getInputProps('password')}
 					/>
-					<Group position='right' mt='md'>
-						<Button type='submit' fullWidth>
+					<Group position='right'>
+						<Button type='submit' fullWidth mt='md'>
 							Login
 						</Button>
 					</Group>

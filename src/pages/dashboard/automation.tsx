@@ -1,7 +1,18 @@
 import type { NextPage } from 'next'
-import { Grid, Paper, Skeleton, Text } from '@mantine/core'
+import { useRouter } from 'next/router'
+import {
+	Button,
+	Grid,
+	Group,
+	Paper,
+	Skeleton,
+	Text,
+	TextInput,
+} from '@mantine/core'
+import { useForm } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
-import { IconAlertCircle } from '@tabler/icons'
+import { TimeInput } from '@mantine/dates'
+import { IconAlertCircle, IconClock } from '@tabler/icons'
 import axios from 'axios'
 import useSWR from 'swr'
 
@@ -12,7 +23,7 @@ import RequestEventComponent from '../../components/RequestEvent'
 import formatPredictionData from '../../lib/formatPredictionData'
 import prisma from '../../lib/prisma'
 import { withSessionSsr } from '../../lib/withSession'
-import { NordpoolData } from '../../@types/nordpoolApi'
+import { NordpoolData } from '../../@types/nordpoolAPI'
 import { User } from '../../@types/user'
 import { RequestEvent } from '../../@types/event'
 
@@ -20,10 +31,7 @@ interface Props {
 	events: RequestEvent[]
 }
 
-export const getServerSideProps = withSessionSsr<any>(async function ({
-	req,
-	res,
-}) {
+export const getServerSideProps = withSessionSsr<any>(async ({ req, res }) => {
 	if (req.session.user === undefined) {
 		res.setHeader('location', '/login')
 		res.statusCode = 302
@@ -38,21 +46,6 @@ export const getServerSideProps = withSessionSsr<any>(async function ({
 
 	const user = req.session.user
 
-	/* 	const pUser = await prisma.user.findUnique({
-		where: { username: user.username },
-	})
-
-	if (pUser) {
-		await prisma.event.create({
-			data: {
-				title: 'test',
-				timeToExecute: new Date(),
-				endpoint: 'http://example.com/api/turnon',
-				userId: pUser.id,
-			},
-		})
-	} */
-
 	const prismaEvents = await prisma.event.findMany({
 		where: { user: { username: user.username } },
 	})
@@ -61,8 +54,9 @@ export const getServerSideProps = withSessionSsr<any>(async function ({
 
 	for (let event of prismaEvents) {
 		events.push({
+			id: event.id,
 			title: event.title,
-			timeToExecute: event.timeToExecute.toString(),
+			timeToExecute: event.timeToExecute.toISOString(),
 			endpoint: event.endpoint,
 		})
 	}
@@ -76,6 +70,8 @@ export const getServerSideProps = withSessionSsr<any>(async function ({
 })
 
 const Automation: NextPage<Props> = ({ events }) => {
+	const router = useRouter()
+
 	const { data, error } = useSWR('predictionData', async () => {
 		const res = await axios.get('/api/nordpool/predictions')
 		const json = res.data as NordpoolData
@@ -92,6 +88,36 @@ const Automation: NextPage<Props> = ({ events }) => {
 			color: 'red',
 			icon: <IconAlertCircle />,
 		})
+	}
+
+	const form = useForm({
+		initialValues: {
+			title: '',
+			timeToExecute: new Date(),
+			endpoint: '',
+		},
+	})
+
+	const handleSubmit = async (values: typeof form.values) => {
+		try {
+			await axios.post('/api/event/create', {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(values),
+			})
+
+			router.reload()
+		} catch (error: any) {
+			showNotification({
+				id: 'error',
+				autoClose: 5000,
+				title: 'Error:',
+				message: error?.response?.data.error,
+				color: 'red',
+				icon: <IconAlertCircle />,
+			})
+		}
 	}
 
 	const Chart = () => (
@@ -152,10 +178,40 @@ const Automation: NextPage<Props> = ({ events }) => {
 					</Paper>
 				</Grid.Col>
 				<Grid.Col xl={9}>
-					{events.map((event) => (
-						<RequestEventComponent event={event} />
-					))}
+					<Paper p='md'>
+						<form onSubmit={form.onSubmit(handleSubmit)}>
+							<TextInput
+								mb='md'
+								required
+								label='Title'
+								placeholder='Turn on washer'
+								{...form.getInputProps('title')}
+							/>
+							<TextInput
+								mb='md'
+								required
+								label='Endpoint'
+								placeholder='http://example.com/api/enable'
+								{...form.getInputProps('endpoint')}
+							/>
+							<TimeInput
+								mb='md'
+								label='Pick time'
+								icon={<IconClock size={16} />}
+								defaultValue={new Date()}
+								{...form.getInputProps('timeToExecute')}
+							/>
+							<Button fullWidth type='submit' mb='md'>
+								Create
+							</Button>
+						</form>
+					</Paper>
 				</Grid.Col>
+				{events.map((event, index) => (
+					<Grid.Col xl={9} key={index}>
+						<RequestEventComponent event={event} />
+					</Grid.Col>
+				))}
 			</Grid>
 		</DashboardLayout>
 	)

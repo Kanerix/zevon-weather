@@ -11,10 +11,10 @@ import PowerChart from '../../components/PowerChart'
 import PriceColumn from '../../components/PriceColumn'
 import formatMonthlyData from '../../lib/formatMonthlyData'
 import { withSessionSsr } from '../../lib/withSession'
-import type { NordpoolData } from '../../@types/nordpoolApi'
+import type { NordpoolData } from '../../@types/nordpoolAPI'
 import { User } from '../../@types/user'
 
-export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
+export const getServerSideProps = withSessionSsr(async ({ req, res }) => {
 	const user = req.session.user
 
 	if (user === undefined) {
@@ -35,7 +35,7 @@ export const getServerSideProps = withSessionSsr(async function ({ req, res }) {
 })
 
 const Home: NextPage = () => {
-	const { data, error } = useSWR('/api/nordpool/predictions', async (url) => {
+	const { data, error } = useSWR('/api/nordpool/monthly', async (url) => {
 		const res = await axios.get(url)
 		const json = res.data as NordpoolData
 

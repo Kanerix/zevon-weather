@@ -1,4 +1,8 @@
+import { useRouter } from 'next/router'
 import { Box, Button, Code, Paper, Text } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
+import { IconAlertCircle } from '@tabler/icons'
+import axios from 'axios'
 
 import { RequestEvent } from '../@types/event'
 
@@ -8,6 +12,30 @@ interface Props {
 
 export default function RequestEventComponent({ event }: Props) {
 	const date = new Date(event.timeToExecute)
+
+	const router = useRouter()
+
+	const handleDelete = async () => {
+		try {
+			await axios.delete(`/api/event/delete`, {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				data: event.id,
+			})
+
+			router.reload()
+		} catch (error: any) {
+			showNotification({
+				id: 'error',
+				autoClose: 5000,
+				title: 'Error:',
+				message: error?.response?.data.error,
+				color: 'red',
+				icon: <IconAlertCircle />,
+			})
+		}
+	}
 
 	return (
 		<Paper
@@ -26,7 +54,9 @@ export default function RequestEventComponent({ event }: Props) {
 				<Text>{event.title}</Text>
 				<Code>{event.endpoint}</Code>
 				<Text>{'Kl ' + date.getHours() + '.' + date.getMinutes()}</Text>
-				<Button variant='default'>Delete</Button>
+				<Button variant='default' onClick={handleDelete}>
+					Delete
+				</Button>
 			</Box>
 		</Paper>
 	)
