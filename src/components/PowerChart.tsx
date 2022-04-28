@@ -82,7 +82,7 @@ export default function PowerChart({
 					borderColor: '#909090',
 				},
 				markers: {
-					strokeColors: ['#1a1b1e'],
+					strokeColors: ['#1a1b1e', '#1a1b1e'],
 				},
 				theme: {
 					mode: 'dark',

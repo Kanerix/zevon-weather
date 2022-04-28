@@ -1,14 +1,6 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import {
-	Button,
-	Grid,
-	Group,
-	Paper,
-	Skeleton,
-	Text,
-	TextInput,
-} from '@mantine/core'
+import { Button, Grid, Paper, Skeleton, Text, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { TimeInput } from '@mantine/dates'
@@ -104,7 +96,7 @@ const Automation: NextPage<Props> = ({ events }) => {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(values),
+				values,
 			})
 
 			router.reload()
@@ -196,12 +188,13 @@ const Automation: NextPage<Props> = ({ events }) => {
 							/>
 							<TimeInput
 								mb='md'
+								required
 								label='Pick time'
 								icon={<IconClock size={16} />}
 								defaultValue={new Date()}
 								{...form.getInputProps('timeToExecute')}
 							/>
-							<Button fullWidth type='submit' mb='md'>
+							<Button fullWidth type='submit' mt='md'>
 								Create
 							</Button>
 						</form>
