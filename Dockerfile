@@ -39,6 +39,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /build/next.config.js ./
 COPY --from=builder /build/src/public ./public
 COPY --from=builder /build/package.json ./
+COPY --from=builder /build/.env ./
 
 COPY --from=builder --chown=nextjs:nodejs /build/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /build/.next/static ./.next/static
