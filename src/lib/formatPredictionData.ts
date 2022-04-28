@@ -30,19 +30,17 @@ export default function formatPredictionData(
 				continue
 			}
 
-			data.chartSeries.unshift(
-				'Kl. ' + row.Name.replaceAll('&nbsp;', ' ')
-			)
+			data.chartSeries.push('Kl. ' + row.Name.replaceAll('&nbsp;', ' '))
 
 			for (let column of row.Columns.filter((column) =>
 				column.Name.startsWith('DK')
 			)) {
 				if (column.Name == 'DK1') {
-					data.eastDenmark.unshift(
+					data.eastDenmark.push(
 						parseInt(column.Value.replaceAll(' ', ''))
 					)
 				} else {
-					data.westDenmark.unshift(
+					data.westDenmark.push(
 						parseInt(column.Value.replaceAll(' ', ''))
 					)
 				}

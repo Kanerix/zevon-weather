@@ -17,19 +17,6 @@ export default function formatPredictionData(
 
 	try {
 		for (let row of json.data.Rows) {
-			if (
-				[
-					'Min',
-					'Max',
-					'Average',
-					'Peak',
-					'Off-peak 1',
-					'Off-peak 2',
-				].includes(row.Name)
-			) {
-				continue
-			}
-
 			data.chartSeries.unshift(row.Name.replaceAll('&nbsp;', ' '))
 
 			for (let column of row.Columns.filter((column) =>

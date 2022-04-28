@@ -1,20 +1,12 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import {
-	Box,
-	Button,
-	Center,
-	Group,
-	Paper,
-	Text,
-	TextInput,
-} from '@mantine/core'
+import { Button, Center, Group, Paper, Text, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { IconAlertCircle } from '@tabler/icons'
+import axios from 'axios'
 
 import useUser from '../lib/useUser'
-import axios from 'axios'
 
 const Login: NextPage = () => {
 	const form = useForm({

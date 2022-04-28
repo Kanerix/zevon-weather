@@ -11,7 +11,6 @@ import {
 } from '@mantine/core'
 import { IconApi, IconHelp, IconHome, IconAlarm } from '@tabler/icons'
 
-import useUser from '../lib/useUser'
 import { Page } from '../@types/page'
 
 interface MyNavbarProps {
@@ -21,10 +20,6 @@ interface MyNavbarProps {
 
 export default function MyNavbar(props: MyNavbarProps) {
 	const router = useRouter()
-
-	const { user } = useUser()
-
-	console.log(user)
 
 	const pages: Page[] = [
 		{
@@ -61,9 +56,6 @@ export default function MyNavbar(props: MyNavbarProps) {
 			width={{ sm: 200, md: 250 }}
 		>
 			<Navbar.Section mt='xs'>
-				<Navbar.Section>
-					<Paper>{user?.username}ASD</Paper>
-				</Navbar.Section>
 				{pages.map((item, index) => {
 					const selected = router.asPath === item.path
 
