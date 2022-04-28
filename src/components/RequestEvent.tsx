@@ -15,6 +15,30 @@ export default function RequestEventComponent({ event }: Props) {
 
 	const router = useRouter()
 
+	const handleTest = async () => {
+		try {
+			await axios.get(event.endpoint)
+
+			showNotification({
+				id: 'error',
+				autoClose: 5000,
+				title: 'Success:',
+				message: 'The request was successful',
+				color: 'green',
+				icon: <IconAlertCircle />,
+			})
+		} catch (error: any) {
+			showNotification({
+				id: 'error',
+				autoClose: 5000,
+				title: 'Error:',
+				message: error?.response?.data.error,
+				color: 'red',
+				icon: <IconAlertCircle />,
+			})
+		}
+	}
+
 	const handleDelete = async () => {
 		try {
 			await axios.delete(`/api/event/delete`, {

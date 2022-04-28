@@ -1,4 +1,4 @@
-FROM node:16-slim AS deps
+FROM node:16 AS deps
 
 WORKDIR /deps
 
@@ -9,7 +9,7 @@ COPY .yarn ./.yarn
 RUN yarn install --immutable
 
 
-FROM node:16-slim AS builder
+FROM node:16 AS builder
 
 RUN apt update
 RUN apt install -y openssl
@@ -25,7 +25,7 @@ RUN yarn prisma generate
 RUN yarn build
 
 
-FROM node:16-slim AS runner
+FROM node:16 AS runner
 
 WORKDIR /app
 

@@ -3,12 +3,6 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../../lib/prisma'
 import { withSessionRoute } from '../../../lib/withSession'
 
-export const config = {
-	api: {
-		bodyParser: false,
-	},
-}
-
 export default withSessionRoute(loginRoute)
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
