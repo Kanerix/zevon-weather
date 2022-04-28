@@ -5,7 +5,7 @@ import {
 	NextApiHandler,
 } from 'next'
 
-import { User } from '../types/user'
+import { User } from '../@types/user'
 
 export const sessionOptions = {
 	cookieName: 'auth',

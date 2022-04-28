@@ -4,7 +4,7 @@ import { showNotification } from '@mantine/notifications'
 import { IconAlertCircle } from '@tabler/icons'
 import axios from 'axios'
 
-import { RequestEvent } from '../types/event'
+import { RequestEvent } from '../@types/event'
 
 interface Props {
 	event: RequestEvent

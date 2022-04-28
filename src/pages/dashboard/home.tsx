@@ -11,8 +11,8 @@ import PowerChart from '../../components/PowerChart'
 import PriceColumn from '../../components/PriceColumn'
 import formatMonthlyData from '../../lib/formatMonthlyData'
 import { withSessionSsr } from '../../lib/withSession'
-import type { NordpoolData } from '../../types/nordpoolAPI'
-import { User } from '../../types/user'
+import type { NordpoolData } from '../../@types/nordpoolAPI'
+import { User } from '../../@types/user'
 
 export const getServerSideProps = withSessionSsr(async ({ req, res }) => {
 	const user = req.session.user

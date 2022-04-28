@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Dispatch, PropsWithChildren, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import {
-	DefaultMantineColor,
 	Group,
 	Navbar,
 	Paper,
@@ -10,21 +9,10 @@ import {
 	ThemeIcon,
 	UnstyledButton,
 } from '@mantine/core'
-import {
-	IconApi,
-	IconHelp,
-	IconHome,
-	IconAlarm,
-	TablerIconProps,
-} from '@tabler/icons'
-import useUser from '../lib/useUser'
+import { IconApi, IconHelp, IconHome, IconAlarm } from '@tabler/icons'
 
-interface Page {
-	path: string
-	label: string
-	color: DefaultMantineColor
-	icon: PropsWithChildren<TablerIconProps>
-}
+import useUser from '../lib/useUser'
+import { Page } from '../@types/page'
 
 interface MyNavbarProps {
 	open: boolean
@@ -35,6 +23,8 @@ export default function MyNavbar(props: MyNavbarProps) {
 	const router = useRouter()
 
 	const { user } = useUser()
+
+	console.log(user)
 
 	const pages: Page[] = [
 		{
@@ -72,7 +62,7 @@ export default function MyNavbar(props: MyNavbarProps) {
 		>
 			<Navbar.Section mt='xs'>
 				<Navbar.Section>
-					<Paper>{user?.username}</Paper>
+					<Paper>{user?.username}ASD</Paper>
 				</Navbar.Section>
 				{pages.map((item, index) => {
 					const selected = router.asPath === item.path

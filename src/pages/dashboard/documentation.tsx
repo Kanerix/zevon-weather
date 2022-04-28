@@ -4,7 +4,7 @@ import type { NextPage } from 'next'
 import DashbaordHeader from '../../components/DashboardHeader'
 import DashboardLayout from '../../layouts/dashboard'
 import { withSessionSsr } from '../../lib/withSession'
-import { User } from '../../types/user'
+import { User } from '../../@types/user'
 
 export const getServerSideProps = withSessionSsr(async ({ req, res }) => {
 	const user = req.session.user
