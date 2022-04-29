@@ -1,11 +1,11 @@
 import { Code, Grid, List, Paper, Text } from '@mantine/core'
 import type { NextPage } from 'next'
 
-import DashbaordHeader from '../../components/DashboardHeader'
 import DashboardLayout from '../../layouts/dashboard'
+import DashbaordHeader from '../../components/DashboardHeader'
+import EventComponent from '../../components/EventComponent'
 import { withSessionSsr } from '../../lib/withSession'
 import { User } from '../../@types/user'
-import RequestEventComponent from '../../components/EventComponent'
 
 export const getServerSideProps = withSessionSsr(async ({ req, res }) => {
 	const user = req.session.user
@@ -89,13 +89,15 @@ const Docs: NextPage = () => {
 					</Paper>
 				</Grid.Col>
 				<Grid.Col xl={9}>
-					<RequestEventComponent
+					<EventComponent
 						event={{
 							id: '',
 							title: 'Turn on lamp',
+							type: 'GET',
 							endpoint: 'http://example/api/lamp',
 							timeToExecute: new Date().toISOString(),
 						}}
+						disabled
 					/>
 				</Grid.Col>
 

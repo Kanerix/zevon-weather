@@ -21,6 +21,7 @@ model User {
 model Event {
 	id     			String		@id @default(auto()) @map("_id") @db.ObjectId
 	title  			String
+	type			String
 	timeToExecute	DateTime
 	endpoint 		String
 	userId 			String 		@db.ObjectId

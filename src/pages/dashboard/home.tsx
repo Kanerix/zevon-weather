@@ -44,7 +44,6 @@ const Home: NextPage = () => {
 
 	if (error) {
 		showNotification({
-			id: 'error',
 			autoClose: 5000,
 			title: 'Error:',
 			message: error.message,

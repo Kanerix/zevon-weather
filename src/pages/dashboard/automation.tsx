@@ -1,17 +1,7 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import {
-	Button,
-	Grid,
-	Group,
-	Paper,
-	Skeleton,
-	Text,
-	TextInput,
-} from '@mantine/core'
-import { useForm } from '@mantine/hooks'
+import { Grid, Paper, Skeleton, Text } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
-import { TimeInput } from '@mantine/dates'
 import { IconAlertCircle, IconClock } from '@tabler/icons'
 import axios from 'axios'
 import useSWR from 'swr'
@@ -20,7 +10,7 @@ import DashboardLayout from '../../layouts/dashboard'
 import DashbaordHeader from '../../components/DashboardHeader'
 import CreateEventForm from '../../components/CreateEventForm'
 import PowerChart from '../../components/PowerChart'
-import RequestEventComponent from '../../components/EventComponent'
+import EventComponent from '../../components/EventComponent'
 import formatPredictionData from '../../lib/formatPredictionData'
 import prisma from '../../lib/prisma'
 import { withSessionSsr } from '../../lib/withSession'
@@ -57,6 +47,7 @@ export const getServerSideProps = withSessionSsr<any>(async ({ req, res }) => {
 		events.push({
 			id: event.id,
 			title: event.title,
+			type: event.type as 'POST' | 'PUT' | 'DELETE' | 'GET',
 			timeToExecute: event.timeToExecute.toISOString(),
 			endpoint: event.endpoint,
 		})
@@ -82,7 +73,6 @@ const Automation: NextPage<Props> = ({ events }) => {
 
 	if (error) {
 		showNotification({
-			id: 'error',
 			autoClose: 5000,
 			title: 'Error:',
 			message: error.message,
@@ -153,7 +143,7 @@ const Automation: NextPage<Props> = ({ events }) => {
 				</Grid.Col>
 				{events.map((event, index) => (
 					<Grid.Col xl={9} key={index}>
-						<RequestEventComponent event={event} />
+						<EventComponent event={event} />
 					</Grid.Col>
 				))}
 			</Grid>

@@ -54,7 +54,6 @@ const Signup: NextPage = () => {
 				return await res.data
 			} catch (error: any) {
 				showNotification({
-					id: 'error',
 					autoClose: 5000,
 					title: 'Error:',
 					message: error?.response?.data.error,

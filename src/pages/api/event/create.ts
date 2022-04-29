@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { type } from 'os'
 
 import prisma from '../../../lib/prisma'
 import { withSessionRoute } from '../../../lib/withSession'
@@ -17,12 +18,13 @@ async function createEventRoute(req: NextApiRequest, res: NextApiResponse) {
 			return
 		}
 
-		const { title, timeToExecute, endpoint } = req.body.values
+		const { title, timeToExecute, endpoint, type } = req.body.values
 
 		if (
 			typeof title !== 'string' ||
 			typeof timeToExecute !== 'string' ||
-			typeof endpoint !== 'string'
+			typeof endpoint !== 'string' ||
+			typeof type !== 'string'
 		) {
 			res.status(400).json({ error: 'Invalid input' })
 			return
@@ -40,6 +42,7 @@ async function createEventRoute(req: NextApiRequest, res: NextApiResponse) {
 		await prisma.event.create({
 			data: {
 				title: title,
+				type: type,
 				timeToExecute: timeToExecute,
 				endpoint: endpoint,
 				user: { connect: { id: user.id } },

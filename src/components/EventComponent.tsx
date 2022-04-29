@@ -8,9 +8,10 @@ import { EndpointEvent } from '../@types/event'
 
 interface Props {
 	event: EndpointEvent
+	disabled?: boolean
 }
 
-export default function RequestEventComponent({ event }: Props) {
+export default function RequestEventComponent({ event, disabled }: Props) {
 	const date = new Date(event.timeToExecute).toLocaleDateString('en-GB', {
 		timeZone: 'Europe/Copenhagen',
 		hour: 'numeric',
@@ -20,18 +21,19 @@ export default function RequestEventComponent({ event }: Props) {
 	const router = useRouter()
 
 	const handleTest = async () => {
-		try {
-			console.log(event.endpoint)
+		if (disabled) {
+			return
+		}
 
+		try {
 			await axios.post('/api/event/test', {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				data: { endpoint: event.endpoint },
+				data: { endpoint: event.endpoint, type: event.type },
 			})
 
 			showNotification({
-				id: 'success',
 				autoClose: 5000,
 				title: 'Success:',
 				message: 'The request was successful',
@@ -40,7 +42,6 @@ export default function RequestEventComponent({ event }: Props) {
 			})
 		} catch (error: any) {
 			showNotification({
-				id: 'error',
 				autoClose: 5000,
 				title: 'Error:',
 				message: error?.message,
@@ -51,18 +52,21 @@ export default function RequestEventComponent({ event }: Props) {
 	}
 
 	const handleDelete = async () => {
+		if (disabled) {
+			return
+		}
+
 		try {
 			await axios.delete(`/api/event/delete`, {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				data: { id: event.id },
+				data: { id: event.id, type: event.type },
 			})
 
 			router.reload()
 		} catch (error: any) {
 			showNotification({
-				id: 'error',
 				autoClose: 5000,
 				title: 'Error:',
 				message: error?.response?.data.error,
@@ -89,6 +93,7 @@ export default function RequestEventComponent({ event }: Props) {
 			>
 				<Text>{event.title}</Text>
 				<Code>{event.endpoint}</Code>
+				<Text>{event.type}</Text>
 				<Text>{date}</Text>
 				<Box>
 					<Button variant='default' onClick={handleTest} mr='xs'>

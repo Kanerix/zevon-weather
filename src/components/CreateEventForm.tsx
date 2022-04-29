@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { Button, Group, Paper, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { TimeInput } from '@mantine/dates'
-import { useForm } from '@mantine/hooks'
+import { useForm } from '@mantine/form'
 import { IconAlertCircle, IconClock } from '@tabler/icons'
 import axios from 'axios'
 
@@ -11,8 +11,15 @@ export default function CreateEventPopup() {
 	const form = useForm({
 		initialValues: {
 			title: '',
-			timeToExecute: new Date(),
 			endpoint: '',
+			type: '',
+			timeToExecute: new Date(),
+		},
+		validate: {
+			type: (value) =>
+				['POST', 'PUT', 'DELETE', 'GET'].includes(value)
+					? null
+					: 'Invalid type',
 		},
 	})
 
@@ -53,8 +60,15 @@ export default function CreateEventPopup() {
 				type='text'
 				label='Endpoint'
 				placeholder='http://example.com/api/enable'
-				value={form.values.title}
 				{...form.getInputProps('endpoint')}
+			/>
+			<TextInput
+				mb='md'
+				required
+				type='text'
+				label='Type'
+				placeholder='POST'
+				{...form.getInputProps('type')}
 			/>
 			<TimeInput
 				mb='md'

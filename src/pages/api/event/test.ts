@@ -18,20 +18,22 @@ async function testEventRoute(req: NextApiRequest, res: NextApiResponse) {
 			return
 		}
 
-		const { endpoint } = req.body.data
+		const { endpoint, type } = req.body.data
 
-		if (typeof endpoint !== 'string') {
+		if (typeof endpoint !== 'string' || typeof type !== 'string') {
 			res.status(400).json({ error: 'Invalid input' })
 			return
 		}
 
 		try {
-			axios.get(endpoint)
-			res.send({ ok: true })
+			const testRes = await axios(endpoint, {
+				method: type,
+			})
+
+			res.status(testRes.status).send({ ok: true })
 			return
 		} catch (error: any) {
-			console.log(error)
-			res.send({ error: error.message })
+			res.status(400).json({ error: error.message })
 			return
 		}
 	} catch (error) {
