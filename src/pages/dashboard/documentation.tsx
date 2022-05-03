@@ -47,11 +47,11 @@ const Docs: NextPage = () => {
 						</Text>
 						<Text size='lg' mb='md'>
 							This is a guide on how to use the automation feature
-							found at the automation tab of the
+							found at the automation tab.
 						</Text>
 						<Text size='lg' mb='md'>
 							Before getting started you will need to get familiar
-							with the point under.
+							with the following points.
 						</Text>
 						<List size='lg' mb='xl'>
 							<List.Item>
@@ -75,6 +75,13 @@ const Docs: NextPage = () => {
 							for a REST API) that is used by the server to send a
 							signal to. This is a basic get request with no body
 							provided in the body.
+						</Text>
+						<Text size='lg' mb='md'>
+							After setting the endpoint, you will need to provide
+							a HTTP request method/type. This can either be GET,
+							PUT, DELETE or POST. This type will be used as the
+							HTTP method when sending the request to the
+							endpoint.
 						</Text>
 						<Text size='lg' mb='md'>
 							At last you will need to provide a timestamp for
@@ -114,8 +121,8 @@ const Docs: NextPage = () => {
 							delete button does what it says, it deletes the
 							event. The test button will send the signal to the
 							endpoint and display the response. This means you
-							can check if you have setup the REST API at correct
-							at your end.
+							can check if you have setup the REST API correct at
+							your end.
 						</Text>
 					</Paper>
 				</Grid.Col>

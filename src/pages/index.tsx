@@ -13,7 +13,27 @@ const Home: NextPage = () => {
 				flexDirection: 'column',
 			}}
 		>
-			<Text size='xl'>Save money while helping our enviroment!</Text>
+			<Text
+				size='xl'
+				sx={{
+					fontSize: '40px',
+					textAlign: 'center',
+					fontWeight: 'bold',
+					marginBottom: '30px',
+				}}
+			>
+				Zevon Weather
+			</Text>
+			<Text
+				size='xl'
+				sx={{
+					fontSize: '40px',
+					textAlign: 'center',
+					marginBottom: '30px',
+				}}
+			>
+				Save money while <br /> helping our enviroment!
+			</Text>
 			<Box
 				sx={{
 					display: 'felx',
@@ -23,10 +43,12 @@ const Home: NextPage = () => {
 				}}
 			>
 				<Link href='/login'>
-					<Button variant='default'>Login</Button>
+					<Button variant='default' size='xl'>
+						Login
+					</Button>
 				</Link>
 				<Link href='/signup'>
-					<Button>Signup</Button>
+					<Button size='xl'>Signup</Button>
 				</Link>
 			</Box>
 		</Box>
