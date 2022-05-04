@@ -92,7 +92,14 @@ export default function RequestEventComponent({ event, disabled }: Props) {
 				}}
 			>
 				<Text>{event.title}</Text>
-				<Code>{event.endpoint}</Code>
+				<Code
+					sx={{
+						maxWidth: '300px',
+						overflow: 'hidden',
+					}}
+				>
+					{event.endpoint}
+				</Code>
 				<Text>{event.type}</Text>
 				<Text>{date}</Text>
 				<Box>
